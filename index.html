@@ -15,16 +15,52 @@
       position: relative;
     }
 
+    /* Top container with image background and border */
+    #top-banner {
+      position: relative;
+      width: 100%;
+      max-width: 800px;
+      margin: 20px auto 40px auto;
+      border: 5px solid #FFD700; /* Gold border */
+      border-radius: 12px;
+      background-image: url('https://temuri.pics/screenshots/1.png');
+      background-size: cover;
+      background-position: center;
+      height: 180px;
+      box-shadow: 0 0 20px #FFD700;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 15px;
+      box-sizing: border-box;
+    }
+
+    /* Discord info box inside banner */
+    #discord-info {
+      background: rgba(0,0,0,0.7);
+      border: 2px solid #FFD700;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 1.2em;
+      color: #FFD700;
+      box-shadow: 0 0 15px #FFD700;
+      user-select: none;
+      max-width: 90%;
+      text-align: center;
+      font-weight: bold;
+      font-family: 'Courier New', monospace;
+    }
+
     .content {
       max-width: 800px;
-      margin: 0 auto 100px; /* bottom space for textbox */
-      padding: 20px;
+      margin: 0 auto 100px;
+      padding: 0 20px 20px 20px;
     }
 
     .title {
       text-align: center;
       font-size: 3em;
-      margin: 20px 0;
+      margin: 0 0 20px 0;
       color: #fff;
       text-shadow: 0 0 5px #000;
       user-select: none;
@@ -40,7 +76,7 @@
 
     .image-card {
       background-color: rgba(0,0,0,0.6);
-      border: 3px solid #009639; /* green border */
+      border: 3px solid #009639;
       padding: 10px;
       text-align: center;
       box-shadow: 0 0 15px #009639;
@@ -52,7 +88,7 @@
 
     .image-card:hover {
       transform: scale(1.03);
-      border-color: #EF3340; /* red on hover */
+      border-color: #EF3340;
       box-shadow: 0 0 20px #EF3340;
     }
 
@@ -60,7 +96,7 @@
       max-width: 100%;
       height: auto;
       border-radius: 4px;
-      border: 2px solid #00BFFF; /* blue border around image */
+      border: 2px solid #00BFFF;
       box-shadow: 0 0 10px #00BFFF;
       display: block;
       margin: 0 auto;
@@ -69,27 +105,8 @@
     .caption {
       margin-top: 8px;
       font-size: 1.3em;
-      color: #FFD700; /* gold-ish for caption */
+      color: #FFD700;
       user-select: none;
-    }
-
-    /* Fixed textbox at bottom */
-    #info-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: linear-gradient(90deg, #00BFFF, #EF3340, #009639);
-      color: white;
-      font-size: 1.1em;
-      padding: 15px 20px;
-      box-shadow: 0 -4px 10px rgba(0,0,0,0.7);
-      text-align: center;
-      font-family: 'Courier New', monospace;
-      user-select: none;
-      z-index: 1000;
-      border-top-left-radius: 10px;
-      border-top-right-radius: 10px;
     }
 
     /* Modal for enlarged image */
@@ -123,9 +140,42 @@
       border-radius: 8px;
       pointer-events: none;
     }
+
+    /* Play music button */
+    #play-music {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      padding: 10px 20px;
+      font-size: 1em;
+      background: #009639;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 0 8px #009639;
+      z-index: 1500;
+      user-select: none;
+      transition: background-color 0.3s ease;
+    }
+
+    #play-music:hover {
+      background: #007527;
+      box-shadow: 0 0 15px #007527;
+    }
+
+    /* Bottom textbox bar removed since Discord info moved to top */
   </style>
 </head>
 <body>
+
+  <!-- Top banner with embedded discord info -->
+  <div id="top-banner" role="banner" aria-label="Discord info banner with background image">
+    <div id="discord-info" tabindex="0">
+      Discord: <strong>t3muri</strong> | ID: <em>1105429338213597234</em> |  <a href="" style="color:#FFD700; text-decoration: underline;"></a>
+    </div>
+  </div>
+
   <div class="content">
     <h1 class="title">WALL OF SHAME: TEMURI</h1>
 
@@ -162,10 +212,12 @@
     <img src="" alt="Enlarged evidence image" />
   </div>
 
-  <!-- Bottom textbox -->
-  <div id="info-bar">
-    Discord: <strong>t3muri</strong> | ID: <em>1105429338213597234</em> |  <a href="mailto:temuri@example.com" style="color:#FFD700;"></a>
-  </div>
+  <!-- Play music button -->
+  <button id="play-music">▶ Play Music</button>
+  <audio id="audio-player" loop>
+    <source src="/music/edgy-track.mp3" type="audio/mpeg" />
+    Your browser does not support the audio element.
+  </audio>
 
   <script>
     // Modal image functionality
@@ -198,6 +250,19 @@
         document.body.style.overflow = '';
       }
     });
+
+    // Play music button functionality
+    const playBtn = document.getElementById('play-music');
+    const audio = document.getElementById('audio-player');
+
+    playBtn.addEventListener('click', () => {
+      audio.play().then(() => {
+        playBtn.style.display = 'none';
+      }).catch(() => {
+        alert('Autoplay blocked. Please click play again.');
+      });
+    });
   </script>
+
 </body>
 </html>
