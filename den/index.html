@@ -149,10 +149,8 @@
       <div class="profile-header">
         <img class="profile-avatar" src="pfp/pfp.png" alt="Profile Picture">
         <div>
-          <div class="profile-name">Den#wokenK</div>
-          <div class="profile-tag">syndn
-ig - d3nsync
-</div>
+          <div class="profile-name">Den#WokenK</div>
+          <div class="profile-tag">@syndn ig - d3nsync</div>
         </div>
       </div>
       
@@ -186,46 +184,37 @@ ig - d3nsync
     <img src="" alt="Enlarged view">
   </div>
 
-  <audio id="audio-player" src="../music/music.mp3"></audio>
+  <audio id="audio-player" loop>
+    <source src="../music/music.mp3" type="audio/mpeg" />
+  </audio>
   
   <script>
-    // Music player functionality
+    // Music player functionality (copied from Temuri page)
     const audioPlayer = document.getElementById('audio-player');
     const playBtn = document.getElementById('play-btn');
     const timestamp = document.getElementById('timestamp');
     
-    audioPlayer.addEventListener('loadedmetadata', function() {
-      const duration = audioPlayer.duration;
-      const minutes = Math.floor(duration / 60);
-      const seconds = Math.floor(duration % 60);
-      timestamp.textContent = `0:00 / ${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
-    });
-    
-    playBtn.addEventListener('click', function() {
-      if (audioPlayer.paused) {
-        audioPlayer.play().then(() => {
-          playBtn.textContent = '⏸ Pause';
-        }).catch(error => {
-          alert('Error playing audio. Please interact with page first: ' + error.message);
-          // Add a workaround for autoplay policies
-          document.body.addEventListener('click', function firstClick() {
-            audioPlayer.play();
-            document.body.removeEventListener('click', firstClick);
-          }, { once: true });
+    playBtn.addEventListener('click', () => {
+      audioPlayer.play().then(() => {
+        playBtn.textContent = '■ Stop Music';
+        playBtn.addEventListener('click', function stopMusic() {
+          audioPlayer.pause();
+          audioPlayer.currentTime = 0;
+          playBtn.textContent = '▶ Play';
+          playBtn.removeEventListener('click', stopMusic);
+          playBtn.addEventListener('click', arguments.callee);
         });
-      } else {
-        audioPlayer.pause();
-        playBtn.textContent = '▶ Play';
-      }
+      }).catch(() => {
+        alert('Autoplay blocked. Please click play again.');
+      });
     });
-    
+
+    // Update timestamp
     audioPlayer.addEventListener('timeupdate', function() {
       const minutes = Math.floor(audioPlayer.currentTime / 60);
       const seconds = Math.floor(audioPlayer.currentTime % 60);
-      const durationMinutes = Math.floor(audioPlayer.duration / 60);
-      const durationSeconds = Math.floor(audioPlayer.duration % 60);
       timestamp.textContent = 
-        `${minutes}:${seconds < 10 ? '0' + seconds : seconds} / ${durationMinutes}:${durationSeconds < 10 ? '0' + durationSeconds : durationSeconds}`;
+        `${minutes}:${seconds < 10 ? '0' + seconds : seconds} / 3:42`;
     });
 
     // Gallery modal functionality
