@@ -197,33 +197,16 @@
       });
     }
 
-    // GALLERY
-    function loadGallery() {
-      const gallery = document.getElementById('gallery');
-      for (let i = 1; i <= 8; i++) {
-        const item = document.createElement('div');
-        item.className = 'gallery-item';
-        item.innerHTML = `<img class="gallery-media" src="screenshots/${i}.png" alt="Image ${i}">`;
-        gallery.appendChild(item);
-      }
+<script>
+  function loadGallery() {
+    const gallery = document.getElementById('gallery');
+    for (let i = 1; i <= 8; i++) {
+      const item = document.createElement('div');
+      item.className = 'gallery-item';
+      item.innerHTML = `<img class="gallery-media" src="Moneyman/screenshots/${i}.png" alt="Image ${i}">`;
+      gallery.appendChild(item);
     }
-
-    // INIT
-    window.onload = function () {
-      createRain();
-      typeWriter();
-      createParticles();
-      loadGallery();
-
-      document.getElementById('entry-screen').addEventListener('click', function () {
-        this.style.opacity = '0';
-        setTimeout(() => {
-          this.style.display = 'none';
-          document.getElementById('main-content').style.display = 'block';
-          document.body.style.overflowY = 'auto'; // Allow scrolling
-        }, 1000);
-      });
-    };
-  </script>
+  }
+</script>
 </body>
 </html>
