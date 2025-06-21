@@ -304,9 +304,15 @@
     });
 
     // User navigation button functionality
-    document.getElementById('user-nav').addEventListener('click', function() {
-      window.location.href = '/den';
-    });
-  </script>
+<div id="user-nav">Users</div>
+<div id="user-dropdown" style="display:none">
+  <a href="/den">den</a>
+  <a href="/Moneyman">Moneyman</a>
+  <!-- Add new users here, e.g., <a href="/NewUser">NewUser</a> -->
+</div>
+<script>
+  const users = ['den', 'Moneyman']; // Add new users here, e.g., 'NewUser'
+  document.getElementById('user-nav').onclick = () => document.getElementById('user-dropdown').style.display = document.getElementById('user-dropdown').style.display === 'none' ? 'block' : 'none';
+</script>
 </body>
 </html>
