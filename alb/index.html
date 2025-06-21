@@ -46,7 +46,7 @@
       width: 8px;
       height: 8px;
       background-color: #ffffff;
-      border-radius: 0;
+      border-radius: 50%;
       pointer-events: none;
       z-index: 1000;
       transform: translate(-50%, -50%);
@@ -70,7 +70,7 @@
       transform: translate(-50%, -50%);
       background: #1e1f22;
       width: 380px;
-      border-radius: 0;
+      border-radius: 16px;
       box-shadow: 8px 8px 0 rgba(0,0,0,0.3);
       overflow: hidden;
       z-index: 2;
@@ -113,7 +113,7 @@
     .avatar {
       width: 96px;
       height: 96px;
-      border-radius: 0;
+      border-radius: 50%;
       border: 4px solid transparent;
       border-image: var(--gradient) 1;
       background: url('https://cdn.discordapp.com/avatars/669209954200191006/f953225437d7e699403e2d7148630493.png?size=512') no-repeat center/cover;
@@ -179,7 +179,7 @@
       background: #1e1f22;
       color: #ffffff;
       padding: 5px 10px;
-      border-radius: 0;
+      border-radius: 8px;
       font-size: 10px;
       white-space: nowrap;
       z-index: 10;
@@ -334,7 +334,7 @@ const canvas = document.getElementById("bg");
 const ctx = canvas.getContext("2d");
 let w, h;
 const dots = [];
-const pixelSize = 4; // Larger pixels for more retro feel
+const pixelSize = 4;
 
 function resize() {
   w = canvas.width = window.innerWidth;
@@ -344,7 +344,7 @@ function resize() {
 window.addEventListener("resize", resize);
 resize();
 
-for (let i = 0; i < 50; i++) { // Fewer dots for more pixelated look
+for (let i = 0; i < 50; i++) {
   dots.push({
     x: Math.floor(Math.random() * w / pixelSize) * pixelSize,
     y: Math.floor(Math.random() * h / pixelSize) * pixelSize,
@@ -371,8 +371,10 @@ function draw() {
     if (dot.x < 0 || dot.x > w) dot.vx *= -1;
     if (dot.y < 0 || dot.y > h) dot.vy *= -1;
 
+    ctx.beginPath();
+    ctx.arc(dot.x + pixelSize/2, dot.y + pixelSize/2, pixelSize/2, 0, Math.PI * 2);
     ctx.fillStyle = `hsl(${dot.hue}, 70%, 80%)`;
-    ctx.fillRect(dot.x, dot.y, pixelSize, pixelSize);
+    ctx.fill();
   });
 
   for (let i = 0; i < dots.length; i++) {
@@ -420,7 +422,7 @@ document.addEventListener("mousemove", (e) => {
   const x = e.clientX - centerX;
   const y = e.clientY - centerY;
 
-  const translateX = -(x / centerX) * 10; // Reduced movement for pixel feel
+  const translateX = -(x / centerX) * 10;
   const translateY = -(y / centerY) * 10;
 
   const hue = ((x + y) / (centerX + centerY)) * 180 + 180;
@@ -433,7 +435,7 @@ document.addEventListener("mousemove", (e) => {
   const scale = 1 + Math.max(0, (200 - distToCard) / 2000);
 
   card.style.transform = `translate(-50%, -50%) translate(${Math.floor(translateX)}px, ${Math.floor(translateY)}px) scale(${scale.toFixed(2)})`;
-  card.style.boxShadow = `${Math.floor(spread/4)}px ${Math.floor(spread/4)}px 0 rgba(0,0,0,0.3)`;
+  card.style.boxShadow = `8px 8px 0 rgba(0,0,0,0.3)`;
 });
 
 card.addEventListener("mouseleave", () => {
