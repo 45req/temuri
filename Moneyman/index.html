@@ -38,6 +38,7 @@
       justify-content: center;
       align-items: center;
       z-index: 1000;
+      transition: opacity 1s;
     }
 
     /* Glitch Text */
@@ -136,7 +137,7 @@
 <body>
   <!-- Entry Screen -->
   <div id="entry-screen">
-    <h1 id="glitch-text">MONEYMAN SYSTEM</h1>
+    <h1 id="glitch-text">MONEYMAN</h1>
     <p id="enter-text" style="margin-top: 20px;"></p>
     <div id="rain-container"></div>
   </div>
@@ -203,12 +204,12 @@
         
         if (i % 3 === 0) {
           item.innerHTML = `
-            <video class="gallery-media" muted loop>
-              <source src="screenshots/vid${i}.mp4" type="video/mp4">
+            <video class="gallery-media" muted loop autoplay>
+              <source src="Moneyman/screenshots/vid${i}.mp4" type="video/mp4">
             </video>
           `;
         } else {
-          item.innerHTML = `<img class="gallery-media" src="screenshots/img${i}.jpg" alt="Gallery Image ${i}">`;
+          item.innerHTML = `<img class="gallery-media" src="Moneyman/screenshots/img${i}.jpg" alt="Gallery Image ${i}">`;
         }
         
         gallery.appendChild(item);
@@ -223,8 +224,15 @@
       loadGallery();
       
       // Click to enter
-      document.getElementById('entry-screen').addEventListener('click', function() {
+      document.getElementById('entry-screen').addEventListener('click', function () {
+        this.style.transition = 'opacity 1s';
         this.style.opacity = '0';
         setTimeout(() => {
           this.style.display = 'none';
-          document
+          document.getElementById('main-content').style.display = 'block';
+        }, 1000);
+      });
+    };
+  </script>
+</body>
+</html>
