@@ -425,5 +425,24 @@ card.addEventListener("mouseleave", () => {
   card.style.boxShadow = `0 0 20px rgba(88, 101, 242, 0.5)`;
 });
 </script>
+<script>
+  document.getElementById('entry-screen').addEventListener('click', () => {
+    document.getElementById('entry-screen').style.display = 'none';
+    document.getElementById('main-content').style.display = 'block';
+
+    const audio = document.getElementById('audio-player');
+    audio.play().catch(e => {
+      console.warn("Autoplay blocked:", e);
+    });
+
+    createParticles();
+    loadGallery();
+  });
+
+  window.addEventListener('DOMContentLoaded', () => {
+    createRain();
+    typeWriter();
+  });
+</script>
 </body>
 </html>
