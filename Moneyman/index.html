@@ -14,9 +14,7 @@
   <meta name="twitter:description" content="Evidence screenshots and info about Temuri." />
   <meta name="twitter:image" content="https://temuri.pics/screenshots/1.png" />
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MoneyMan ♂ (G.O.A.T)</title>
   <style>
     :root {
@@ -210,15 +208,20 @@
     }
 
     .particle {
-      position: absolute;
+      position: fixed;
       width: 4px;
       height: 4px;
       border-radius: 50%;
-      background: white;
       pointer-events: none;
       z-index: 100;
-      filter: blur(0.5px);
+      filter: blur(1px);
       opacity: 0.8;
+      animation: particle-fade 1.5s ease-out forwards;
+    }
+
+    @keyframes particle-fade {
+      0% { opacity: 0.8; transform: scale(1) translate(0, 0); }
+      100% { opacity: 0; transform: scale(0.5) translate(var(--tx), var(--ty)); }
     }
 
     .gallery {
@@ -318,15 +321,15 @@
   <!-- Entry Screen -->
   <div id="entry-screen">
     <h1 id="glitch-text">MONEYMAN</h1>
-    <p id="enter-text" style="margin-top: 20px;"></p>
+    <p id="enter-text"></p>
     <div id="rain-container"></div>
   </div>
 
   <!-- Main Content -->
   <div id="main-content">
     <div class="music-player">
-      <audio controls autoplay loop>
-        <source src="Moneyman/music/music.mp3" type="audio/mpeg" />
+      <audio controls id="audio-player" autoplay loop>
+        <source src="Moneyman/screenshots/music.mp3" type="audio/mpeg" />
         Your browser does not support the audio element.
       </audio>
     </div>
@@ -367,16 +370,45 @@
     }
 
     function createParticles() {
+      let lastSpawn = 0;
+      const spawnInterval = 50; // Spawn particles every 50ms
+      const maxParticles = 50; // Limit total particles
+
       document.addEventListener('mousemove', (e) => {
-        for (let i = 0; i < 3; i++) {
-          const particle = document.createElement('div');
-          particle.className = 'particle';
-          particle.style.left = `${e.clientX + (Math.random() * 20 - 10)}px`;
-          particle.style.top = `${e.clientY + (Math.random() * 20 - 10)}px`;
-          particle.style.opacity = Math.random() * 0.6 + 0.4;
-          document.body.appendChild(particle);
-          setTimeout(() => particle.remove(), 1000);
-        }
+        const now = Date.now();
+        if (now - lastSpawn < spawnInterval) return; // Throttle spawns
+        lastSpawn = now;
+
+        // Check particle count
+        const currentParticles = document.querySelectorAll('.particle');
+        if (currentParticles.length >= maxParticles) return;
+
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+
+        // Randomize size (2px to 6px)
+        const size = Math.random() * 4 + 2;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+
+        // Randomize color (neon or accent)
+        const colors = ['var(--neon)', 'var(--accent)'];
+        particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+        // Position near cursor
+        particle.style.left = `${e.clientX}px`;
+        particle.style.top = `${e.clientY}px`;
+
+        // Randomize motion
+        const tx = (Math.random() - 0.5) * 30; // Horizontal offset (-15 to 15px)
+        const ty = (Math.random() - 0.5) * -30; // Vertical offset (tend upward)
+        particle.style.setProperty('--tx', `${tx}px`);
+        particle.style.setProperty('--ty', `${ty}px`);
+
+        document.body.appendChild(particle);
+
+        // Remove particle after animation
+        setTimeout(() => particle.remove(), 1500);
       });
     }
 
@@ -393,8 +425,7 @@
           item.innerHTML = `
             <a href="${img.src}" target="_blank">
               <img class="gallery-media" src="${img.src}" alt="Screenshot ${i}">
-            </a>
-          `;
+            </a>`;
           gallery.appendChild(item);
           i++;
           tryNext(); // load next
@@ -413,14 +444,14 @@
         return;
       }
 
-      const user = data.data.discord_user;
+      const user = data.data.discordapp_user;
       const activities = data.data.activities;
       const status = data.data.discord_status;
 
       // Update avatar
       const avatarUrl = user.avatar 
         ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`
-        : `https://cdn.discordapp.com/embed/avatars/${parseInt(user.discriminator) % 5}.png`;
+        : `https://cdn.discord.com/avatars/${user.id}/${user.avatar}.png`;
       document.getElementById('discord-avatar').src = avatarUrl;
 
       // Update username and discriminator
@@ -450,7 +481,7 @@
       }
 
       // Update activity
-      const activityContainer = document.getElementById('discord-activity');
+      const activityContainer = document.getElementById('activity-id');
       const activityName = document.getElementById('activity-name');
       const activityDetails = document.getElementById('activity-details');
 
@@ -515,6 +546,7 @@
         }, 500);
       });
     };
+
   </script>
 </body>
 </html>
