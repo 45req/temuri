@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Den#wokenK</title>
+  <style>
+    :root {
+      --bg-primary: #36393f;
+      --bg-secondary: #2f3136;
+      --bg-tertiary: #202225;
+      --text-normal: #dcddde;
+      --text-muted: #72767d;
+      --accent: #5865f2;
+      --interactive: #b9bbbe;
+      --header-primary: #fff;
+    }
+    
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-normal);
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 20px;
+    }
+    
+    .profile-sidebar {
+      background-color: var(--bg-secondary);
+      border-radius: 8px;
+      padding: 20px;
+      position: sticky;
+      top: 20px;
+      height: fit-content;
+    }
+    
+    .profile-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background-color: var(--bg-tertiary);
+      margin-right: 15px;
+      background-image: url('screenshots/1.png');
+      background-size: cover;
+      border: 4px solid var(--accent);
+    }
+    
+    .profile-name {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--header-primary);
+      margin-bottom: 5px;
+    }
+    
+    .profile-tag {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+    
+    .profile-bio {
+      background-color: var(--bg-tertiary);
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+    
+    .section {
+      margin-bottom: 20px;
+    }
+    
+    .section-title {
+      color: var(--header-primary);
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      border-bottom: 1px solid var(--bg-tertiary);
+      padding-bottom: 5px;
+    }
+    
+    .roles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 10px;
+    }
+    
+    .role {
+      background-color: var(--bg-tertiary);
+      padding: 5px 10px;
+      border-radius: 3px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .role-color {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 8px;
+      background-color: var(--accent);
+    }
+    
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .gallery-item {
+      background-color: var(--bg-secondary);
+      border-radius: 5px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    
+    .gallery-item:hover {
+      transform: scale(1.03);
+    }
+    
+    .gallery-item img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+    
+    .music-player {
+      background-color: var(--bg-tertiary);
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+    
+    .music-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    
+    .music-btn {
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    
+    .music-btn:hover {
+      background-color: #4752c4;
+    }
+    
+    .timestamp {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="profile-sidebar">
+      <div class="profile-header">
+        <div class="profile-avatar"></div>
+        <div>
+          <div class="profile-name">Den</div>
+          <div class="profile-tag">@wokenK</div>
+          <div style="font-size: 12px; color: var(--text-muted);">syndn • ig - d3nsync 🌤️ Mock</div>
+        </div>
+      </div>
+      
+      <div class="profile-bio">
+        "About Me" those who know 😊😊😊😊
+      </div>
+      
+      <div class="section">
+        <div class="section-title">Roles</div>
+        <div class="roles-grid">
+          <div class="role"><span class="role-color" style="background: #ff0000;"></span> WOCK</div>
+          <div class="role"><span class="role-color" style="background: #00ff00;"></span> Hollywood</div>
+          <div class="role"><span class="role-color" style="background: #0000ff;"></span> Prada Steppin</div>
+          <div class="role"><span class="role-color" style="background: #ffff00;"></span> 2 Turnt</div>
+          <div class="role"><span class="role-color" style="background: #ff00ff;"></span> Goyard</div>
+          <div class="role"><span class="role-color" style="background: #00ffff;"></span> WRLD</div>
+          <div class="role"><span class="role-color" style="background: #888888;"></span> server updates</div>
+        </div>
+      </div>
+      
+      <div class="section">
+        <div class="section-title">Member Since</div>
+        <div>📍 27 Oct 2020 • 📞 15 Mar 2025</div>
+      </div>
+      
+      <div class="section">
+        <div class="section-title">Connections</div>
+        <div>
+          <div style="display: flex; align-items: center; margin-bottom: 10px;">
+            <div style="width: 24px; height: 24px; background-color: var(--bg-tertiary); border-radius: 50%; margin-right: 10px;"></div>
+            <div>
+              <div>densync 🌤️</div>
+              <div style="font-size: 12px; color: var(--text-muted);">32,111 Followers • 3,653 Following</div>
+              <div style="font-size: 12px; color: var(--text-muted);">1.1M Likes</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="profile-main">
+      <div class="section">
+        <div class="section-title">Gallery</div>
+        <div class="gallery">
+          <div class="gallery-item">
+            <img src="screenshots/1.png" alt="Den screenshot 1">
+          </div>
+          <div class="gallery-item">
+            <img src="screenshots/2.png" alt="Den screenshot 2">
+          </div>
+          <div class="gallery-item">
+            <img src="screenshots/3.png" alt="Den screenshot 3">
+          </div>
+        </div>
+      </div>
+      
+      <div class="music-player">
+        <div class="section-title">Music</div>
+        <div>Now Playing: Den's Theme</div>
+        <div class="music-controls">
+          <button class="music-btn" id="play-btn">▶ Play</button>
+          <span class="timestamp">0:00 / 3:42</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <audio id="audio-player" src="../music/music.mp3"></audio>
+  
+  <script>
+    const audioPlayer = document.getElementById('audio-player');
+    const playBtn = document.getElementById('play-btn');
+    
+    playBtn.addEventListener('click', function() {
+      if (audioPlayer.paused) {
+        audioPlayer.play();
+        playBtn.textContent = '⏸ Pause';
+      } else {
+        audioPlayer.pause();
+        playBtn.textContent = '▶ Play';
+      }
+    });
+    
+    // Update timestamp (simplified version)
+    audioPlayer.addEventListener('timeupdate', function() {
+      const minutes = Math.floor(audioPlayer.currentTime / 60);
+      const seconds = Math.floor(audioPlayer.currentTime % 60);
+      document.querySelector('.timestamp').textContent = 
+        `${minutes}:${seconds < 10 ? '0' + seconds : seconds} / 3:42`;
+    });
+  </script>
+</body>
+</html>
