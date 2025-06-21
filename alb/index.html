@@ -242,12 +242,7 @@
     }
 
     audio {
-      display: none; /* Hide controls */
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translate(-50%, -45%); }
-      to { opacity: 1; transform: translate(-50%, -50%); }
+      display: none;
     }
   </style>
 </head>
@@ -291,20 +286,17 @@
 </div>
 
 <script>
-// Cursor dot follow
+// Cursor dot
 const cursorDot = document.getElementById('cursorDot');
 const audio = document.getElementById('bgMusic');
 
-// Function to start audio playback
 function startAudio() {
   audio.muted = false;
   audio.play().catch(error => console.log('Autoplay prevented:', error));
 }
 
-// Attempt to play on load
 startAudio();
 
-// Add multiple interaction listeners to ensure audio starts
 ['click', 'mousemove', 'keydown'].forEach(event => {
   document.addEventListener(event, startAudio, { once: true });
 });
@@ -315,7 +307,7 @@ document.addEventListener('mousemove', (e) => {
   cursorDot.style.backgroundColor = `hsl(${e.clientX % 360}, 70%, 80%)`;
 });
 
-// Background dots animation
+// Animated dots background
 const canvas = document.getElementById("bg");
 const ctx = canvas.getContext("2d");
 let w, h;
@@ -395,6 +387,7 @@ function draw() {
 
 draw();
 
+// Card hover animation
 const card = document.querySelector(".profile-wrapper");
 
 document.addEventListener("mousemove", (e) => {
@@ -424,25 +417,6 @@ card.addEventListener("mouseleave", () => {
   card.style.transform = `translate(-50%, -50%) scale(1)`;
   card.style.boxShadow = `0 0 20px rgba(88, 101, 242, 0.5)`;
 });
-</script>
-<script>
-  document.getElementById('entry-screen').addEventListener('click', () => {
-    document.getElementById('entry-screen').style.display = 'none';
-    document.getElementById('main-content').style.display = 'block';
-
-    const audio = document.getElementById('audio-player');
-    audio.play().catch(e => {
-      console.warn("Autoplay blocked:", e);
-    });
-
-    createParticles();
-    loadGallery();
-  });
-
-  window.addEventListener('DOMContentLoaded', () => {
-    createRain();
-    typeWriter();
-  });
 </script>
 </body>
 </html>
