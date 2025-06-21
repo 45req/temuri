@@ -186,27 +186,34 @@
 
   <audio id="audio-player" loop>
     <source src="/music/music.mp3" type="audio/mpeg" />
-    Your browser does not support the audio element.
   </audio>
   
   <script>
-    // Improved music player functionality
+    // Music player with reliable autoplay handling
     const audioPlayer = document.getElementById('audio-player');
     const playBtn = document.getElementById('play-btn');
     const timestamp = document.getElementById('timestamp');
     
-    // First click handler to unlock audio
+    // Track if we've unlocked audio
+    let audioUnlocked = false;
+    
+    // Function to unlock audio
     const unlockAudio = () => {
-      // Create a tiny silent audio context to unlock autoplay
-      const context = new (window.AudioContext || window.webkitAudioContext)();
-      const oscillator = context.createOscillator();
-      oscillator.connect(context.destination);
-      oscillator.start();
-      oscillator.stop(context.currentTime + 0.001);
-      
-      // Remove this event listener after first interaction
-      document.body.removeEventListener('click', unlockAudio);
-      document.body.removeEventListener('touchstart', unlockAudio);
+      if (!audioUnlocked) {
+        // This tiny silent audio unlocks the audio context
+        const context = new (window.AudioContext || window.webkitAudioContext)();
+        const buffer = context.createBuffer(1, 1, 22050);
+        const source = context.createBufferSource();
+        source.buffer = buffer;
+        source.connect(context.destination);
+        source.start(0);
+        
+        audioUnlocked = true;
+        document.body.removeEventListener('click', unlockAudio);
+        document.body.removeEventListener('touchstart', unlockAudio);
+        
+        console.log("Audio unlocked - can now play music");
+      }
     };
     
     // Set up initial event listeners to unlock audio
@@ -215,18 +222,41 @@
     
     // Music player control
     playBtn.addEventListener('click', function() {
-      // First check if we need to resume the AudioContext
+      if (!audioUnlocked) {
+        alert('Please click anywhere on the page first to unlock audio');
+        return;
+      }
+      
       if (audioPlayer.paused) {
-        audioPlayer.play().then(() => {
-          playBtn.textContent = '⏸ Pause';
-        }).catch(error => {
-          console.error("Playback failed:", error);
-          alert('Click anywhere on the page first, then try playing again.');
-        });
+        audioPlayer.play()
+          .then(() => {
+            playBtn.textContent = '⏸ Pause';
+            console.log("Playback started successfully");
+          })
+          .catch(error => {
+            console.error("Playback failed:", error);
+            alert('Error: ' + error.message);
+          });
       } else {
         audioPlayer.pause();
         playBtn.textContent = '▶ Play';
       }
+    });
+    
+    // Update timestamp
+    audioPlayer.addEventListener('timeupdate', function() {
+      const minutes = Math.floor(audioPlayer.currentTime / 60);
+      const seconds = Math.floor(audioPlayer.currentTime % 60);
+      const durationMinutes = Math.floor(audioPlayer.duration / 60);
+      const durationSeconds = Math.floor(audioPlayer.duration % 60);
+      
+      timestamp.textContent = 
+        `${minutes}:${seconds < 10 ? '0' + seconds : seconds} / ${durationMinutes}:${durationSeconds < 10 ? '0' + durationSeconds : durationSeconds}`;
+    });
+    
+    // Handle when audio ends
+    audioPlayer.addEventListener('ended', function() {
+      playBtn.textContent = '▶ Play';
     });
     
     // Update timestamp
