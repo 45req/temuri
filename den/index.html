@@ -189,98 +189,99 @@
   </audio>
   
   <script>
-    // Music player with reliable autoplay handling
+    // Music player with robust error handling
     const audioPlayer = document.getElementById('audio-player');
     const playBtn = document.getElementById('play-btn');
     const timestamp = document.getElementById('timestamp');
     
-    // Track if we've unlocked audio
-    let audioUnlocked = false;
+    // Track player state
+    let isPlaying = false;
+    let audioReady = false;
     
-    // Function to unlock audio
+    // Function to initialize audio
+    const initAudio = () => {
+      // Load the audio
+      audioPlayer.load();
+      
+      // Set up event listeners
+      audioPlayer.addEventListener('canplaythrough', () => {
+        audioReady = true;
+        console.log("Audio is ready to play");
+      });
+      
+      audioPlayer.addEventListener('error', (e) => {
+        console.error("Audio error:", e);
+        alert('Error loading audio file. Please check console for details.');
+      });
+    };
+    
+    // Unlock audio on first interaction
     const unlockAudio = () => {
-      if (!audioUnlocked) {
-        // This tiny silent audio unlocks the audio context
-        const context = new (window.AudioContext || window.webkitAudioContext)();
+      // Create silent audio context to unlock
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const context = new AudioContext();
         const buffer = context.createBuffer(1, 1, 22050);
         const source = context.createBufferSource();
         source.buffer = buffer;
         source.connect(context.destination);
         source.start(0);
         
-        audioUnlocked = true;
+        // Initialize our audio player
+        initAudio();
+        
+        // Remove unlock listeners
         document.body.removeEventListener('click', unlockAudio);
         document.body.removeEventListener('touchstart', unlockAudio);
         
-        console.log("Audio unlocked - can now play music");
+        console.log("Audio unlocked successfully");
+      } catch (e) {
+        console.error("Audio unlock failed:", e);
       }
     };
     
-    // Set up initial event listeners to unlock audio
+    // Set up unlock listeners
     document.body.addEventListener('click', unlockAudio);
     document.body.addEventListener('touchstart', unlockAudio);
     
-    // Music player control
-    playBtn.addEventListener('click', function() {
-      if (!audioUnlocked) {
-        alert('Please click anywhere on the page first to unlock audio');
+    // Play/pause control with error handling
+    playBtn.addEventListener('click', async () => {
+      if (!audioReady) {
+        alert('Audio not ready yet. Please wait or click the page first.');
         return;
       }
       
-      if (audioPlayer.paused) {
-        audioPlayer.play()
-          .then(() => {
-            playBtn.textContent = '⏸ Pause';
-            console.log("Playback started successfully");
-          })
-          .catch(error => {
-            console.error("Playback failed:", error);
-            alert('Error: ' + error.message);
-          });
-      } else {
-        audioPlayer.pause();
-        playBtn.textContent = '▶ Play';
+      try {
+        if (isPlaying) {
+          await audioPlayer.pause();
+          isPlaying = false;
+          playBtn.textContent = '▶ Play';
+        } else {
+          await audioPlayer.play();
+          isPlaying = true;
+          playBtn.textContent = '⏸ Pause';
+        }
+      } catch (error) {
+        console.error("Playback error:", error);
+        alert(`Playback error: ${error.message}`);
       }
     });
     
     // Update timestamp
     audioPlayer.addEventListener('timeupdate', function() {
-      const minutes = Math.floor(audioPlayer.currentTime / 60);
-      const seconds = Math.floor(audioPlayer.currentTime % 60);
-      const durationMinutes = Math.floor(audioPlayer.duration / 60);
-      const durationSeconds = Math.floor(audioPlayer.duration % 60);
+      const formatTime = (seconds) => {
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs < 10 ? '0' + secs : secs}`;
+      };
       
-      timestamp.textContent = 
-        `${minutes}:${seconds < 10 ? '0' + seconds : seconds} / ${durationMinutes}:${durationSeconds < 10 ? '0' + durationSeconds : durationSeconds}`;
+      timestamp.textContent = `${formatTime(audioPlayer.currentTime)} / ${formatTime(audioPlayer.duration)}`;
     });
     
-    // Handle when audio ends
-    audioPlayer.addEventListener('ended', function() {
+    // Handle audio end
+    audioPlayer.addEventListener('ended', () => {
+      isPlaying = false;
       playBtn.textContent = '▶ Play';
-    });
-    
-    // Update timestamp
-    audioPlayer.addEventListener('timeupdate', function() {
-      const minutes = Math.floor(audioPlayer.currentTime / 60);
-      const seconds = Math.floor(audioPlayer.currentTime % 60);
-      const durationMinutes = Math.floor(audioPlayer.duration / 60);
-      const durationSeconds = Math.floor(audioPlayer.duration % 60);
-      
-      timestamp.textContent = 
-        `${minutes}:${seconds < 10 ? '0' + seconds : seconds} / ${durationMinutes}:${durationSeconds < 10 ? '0' + durationSeconds : durationSeconds}`;
-    });
-    
-    // Handle when audio ends
-    audioPlayer.addEventListener('ended', function() {
-      playBtn.textContent = '▶ Play';
-    });
-
-    // Update timestamp
-    audioPlayer.addEventListener('timeupdate', function() {
-      const minutes = Math.floor(audioPlayer.currentTime / 60);
-      const seconds = Math.floor(audioPlayer.currentTime % 60);
-      timestamp.textContent = 
-        `${minutes}:${seconds < 10 ? '0' + seconds : seconds} / 3:42`;
     });
 
     // Gallery modal functionality
