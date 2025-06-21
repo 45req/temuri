@@ -209,19 +209,17 @@
 
     .particle {
       position: fixed;
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
+      font-size: 14px;
       pointer-events: none;
       z-index: 100;
-      filter: blur(1px);
-      opacity: 0.8;
+      opacity: 0.9;
+      text-shadow: 0 0 10px var(--neon), 0 0 20px var(--accent);
       animation: particle-fade 1.5s ease-out forwards;
     }
 
     @keyframes particle-fade {
-      0% { opacity: 0.8; transform: scale(1) translate(0, 0); }
-      100% { opacity: 0; transform: scale(0.5) translate(var(--tx), var(--ty)); }
+      0% { opacity: 0.9; transform: scale(1) translate(0, 0) rotate(0deg); }
+      100% { opacity: 0; transform: scale(0.5) translate(var(--tx), var(--ty)) rotate(var(--rotate)); }
     }
 
     .gallery {
@@ -370,9 +368,11 @@
     }
 
     function createParticles() {
+      const emojis = ['💸', '🤑', '💰', '🎰', '⭐']; // Moneyman-themed emojis
+      let emojiIndex = 0;
       let lastSpawn = 0;
-      const spawnInterval = 50; // Spawn particles every 50ms
-      const maxParticles = 50; // Limit total particles
+      const spawnInterval = 50; // Spawn every 50ms
+      const maxParticles = 50; // Max particles on screen
 
       document.addEventListener('mousemove', (e) => {
         const now = Date.now();
@@ -385,29 +385,30 @@
 
         const particle = document.createElement('div');
         particle.className = 'particle';
+        particle.textContent = emojis[emojiIndex]; // Cycle through emojis
+        emojiIndex = (emojiIndex + 1) % emojis.length; // Loop emojis
 
-        // Randomize size (2px to 6px)
-        const size = Math.random() * 4 + 2;
-        particle.style.width = `${size}px`;
-        particle.style.height = `${size}px`;
+        // Randomize size (10px to 20px)
+        const size = Math.random() * 10 + 10;
+        particle.style.fontSize = `${size}px`;
 
-        // Randomize color (neon or accent)
-        const colors = ['var(--neon)', 'var(--accent)'];
-        particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+        // Randomize rotation
+        const rotate = Math.random() * 360;
+        particle.style.setProperty('--rotate', `${rotate}deg`);
 
-        // Position near cursor
+        // Position at cursor
         particle.style.left = `${e.clientX}px`;
         particle.style.top = `${e.clientY}px`;
 
-        // Randomize motion
-        const tx = (Math.random() - 0.5) * 30; // Horizontal offset (-15 to 15px)
-        const ty = (Math.random() - 0.5) * -30; // Vertical offset (tend upward)
+        // Randomize motion (slight spread, upward bias)
+        const tx = (Math.random() - 0.5) * 20; // Horizontal: -10 to 10px
+        const ty = (Math.random() - 0.5) * -30; // Vertical: -30 to 0px
         particle.style.setProperty('--tx', `${tx}px`);
         particle.style.setProperty('--ty', `${ty}px`);
 
         document.body.appendChild(particle);
 
-        // Remove particle after animation
+        // Remove after animation
         setTimeout(() => particle.remove(), 1500);
       });
     }
@@ -428,10 +429,10 @@
             </a>`;
           gallery.appendChild(item);
           i++;
-          tryNext(); // load next
+          tryNext(); // Load next image
         };
         img.onerror = () => {
-          // done
+          // Stop when no more images are found
         };
       }
 
@@ -444,14 +445,14 @@
         return;
       }
 
-      const user = data.data.discordapp_user;
+      const user = data.data.discord_user;
       const activities = data.data.activities;
       const status = data.data.discord_status;
 
       // Update avatar
       const avatarUrl = user.avatar 
         ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`
-        : `https://cdn.discord.com/avatars/${user.id}/${user.avatar}.png`;
+        : `https://cdn.discordapp.com/embed/avatars/${parseInt(user.discriminator) % 5}.png`;
       document.getElementById('discord-avatar').src = avatarUrl;
 
       // Update username and discriminator
@@ -481,7 +482,7 @@
       }
 
       // Update activity
-      const activityContainer = document.getElementById('activity-id');
+      const activityContainer = document.getElementById('discord-activity');
       const activityName = document.getElementById('activity-name');
       const activityDetails = document.getElementById('activity-details');
 
@@ -546,7 +547,6 @@
         }, 500);
       });
     };
-
   </script>
 </body>
 </html>
