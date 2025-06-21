@@ -188,8 +188,9 @@
 </head>
 <body>
   <!-- Video Background -->
-  <video id="video-background" autoplay muted loop>
+  <video id="video-background" autoplay muted loop playsinline>
     <source src="Moneyman/screenshots/background.mov" type="video/mp4">
+    <source src="Moneyman/screenshots/background.webm" type="video/webm">
     Your browser does not support the video tag.
   </video>
 
@@ -290,6 +291,15 @@
       typeWriter();
       createParticles();
       loadGallery();
+
+      // Ensure video plays
+      const video = document.getElementById('video-background');
+      video.play().catch(e => {
+        console.log("Video autoplay prevented, trying with user interaction");
+        document.body.addEventListener('click', function() {
+          video.play();
+        }, { once: true });
+      });
 
       document.getElementById('entry-screen').addEventListener('click', function () {
         this.style.opacity = '0';
