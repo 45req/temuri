@@ -1,9 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Basic Open Graph meta tags -->
+  <meta property="og:title" content="My friend: Den" />
+  <meta property="og:description" content="Fuckass Den didn't give my nitro back" />
+  <meta property="og:image" content="https://temuri.pics/den/screenshots/1.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://temuri.pics/den" />
+
+  <!-- Twitter card tags (optional but recommended) -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="My Friend: Temuri" />
+  <meta name="twitter:description" content="Evidence screenshots and info about Temuri." />
+  <meta name="twitter:image" content="https://temuri.pics/screenshots/1.png" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Den#wokenK</title>
+  <title>Den</title>
   <style>
     :root {
       --bg-primary: #36393f;
@@ -16,7 +30,7 @@
     
     body {
       margin: 0;
-      padding: 0;
+      padding: 20px;
       font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
       background-color: var(--bg-primary);
       color: var(--text-normal);
@@ -27,8 +41,7 @@
       grid-template-columns: 300px 1fr;
       gap: 20px;
       max-width: 1200px;
-      margin: 20px auto;
-      padding: 20px;
+      margin: 0 auto;
     }
     
     .profile-sidebar {
@@ -52,9 +65,8 @@
       border-radius: 50%;
       background-color: var(--bg-tertiary);
       margin-right: 15px;
-      background-image: url('pfp/pfp.png');
-      background-size: cover;
       border: 4px solid var(--accent);
+      object-fit: cover;
     }
     
     .profile-name {
@@ -149,17 +161,15 @@
   <div class="container">
     <div class="profile-sidebar">
       <div class="profile-header">
-        <div class="profile-avatar"></div>
+        <img class="profile-avatar" src="den/pfp/pfp.png" alt="Profile Picture">
         <div>
-          <div class="profile-name">Den#wokenK
-</div>
-          <div class="profile-tag">syndn
-ig - d3nsync</div>
+          <div class="profile-name">Den#WokenK</div>
+          <div class="profile-tag">@syndn ig - d3nsync</div>
         </div>
       </div>
       
       <div class="profile-bio">
-        “About Me” those who know 💀💀💀
+        "About Me" those who know 💀💀💀
       </div>
       
       <div class="music-player">
@@ -173,13 +183,13 @@ ig - d3nsync</div>
     
     <div class="gallery">
       <div class="gallery-item">
-        <img src="screenshots/1.png" alt="Screenshot 1">
+        <img src="den/screenshots/1.png" alt="Screenshot 1">
       </div>
       <div class="gallery-item">
-        <img src="screenshots/2.png" alt="Screenshot 2">
+        <img src="den/screenshots/2.png" alt="Screenshot 2">
       </div>
       <div class="gallery-item">
-        <img src="screenshots/3.png" alt="Screenshot 3">
+        <img src="den/screenshots/3.png" alt="Screenshot 3">
       </div>
     </div>
   </div>
@@ -188,30 +198,83 @@ ig - d3nsync</div>
     <img src="" alt="Enlarged view">
   </div>
 
-  <audio id="audio-player" src="../music/music.mp3"></audio>
+  <audio id="audio-player" preload="metadata" loop>
+    <source src="den/music/music.mp3" type="audio/mpeg">
+  </audio>
   
   <script>
-    // Music player functionality
+    // Music player with complete error handling
     const audioPlayer = document.getElementById('audio-player');
     const playBtn = document.getElementById('play-btn');
     const timestamp = document.getElementById('timestamp');
     
-    playBtn.addEventListener('click', function() {
-      if (audioPlayer.paused) {
-        audioPlayer.play();
-        playBtn.textContent = '⏸ Pause';
-      } else {
-        audioPlayer.pause();
+    // Format time display (mm:ss)
+    const formatTime = (seconds) => {
+      return isNaN(seconds) ? '0:00' : 
+        `${Math.floor(seconds / 60)}:${Math.floor(seconds % 60).toString().padStart(2, '0')}`;
+    };
+
+    // Initialize audio
+    const initAudio = () => {
+      audioPlayer.addEventListener('loadedmetadata', () => {
+        timestamp.textContent = `0:00 / ${formatTime(audioPlayer.duration)}`;
+      });
+      
+      audioPlayer.addEventListener('timeupdate', () => {
+        timestamp.textContent = `${formatTime(audioPlayer.currentTime)} / ${formatTime(audioPlayer.duration)}`;
+      });
+      
+      audioPlayer.addEventListener('error', (e) => {
+        console.error("Audio error:", audioPlayer.error);
+        timestamp.textContent = "Error loading audio";
+      });
+      
+      audioPlayer.addEventListener('ended', () => {
         playBtn.textContent = '▶ Play';
+      });
+    };
+
+    // Unlock audio on first interaction
+    const unlockAudio = () => {
+      try {
+        // Create silent audio context
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const context = new AudioContext();
+        const buffer = context.createBuffer(1, 1, 22050);
+        const source = context.createBufferSource();
+        source.buffer = buffer;
+        source.connect(context.destination);
+        source.start(0);
+        
+        // Initialize audio player
+        initAudio();
+        
+        // Remove event listeners
+        document.body.removeEventListener('click', unlockAudio);
+        document.body.removeEventListener('touchstart', unlockAudio);
+      } catch (e) {
+        console.error("Audio unlock failed:", e);
       }
-    });
-    
-    // Update timestamp
-    audioPlayer.addEventListener('timeupdate', function() {
-      const minutes = Math.floor(audioPlayer.currentTime / 60);
-      const seconds = Math.floor(audioPlayer.currentTime % 60);
-      timestamp.textContent = 
-        `${minutes}:${seconds < 10 ? '0' + seconds : seconds} / 3:42`;
+    };
+
+    // Set up unlock listeners
+    document.body.addEventListener('click', unlockAudio, { once: true });
+    document.body.addEventListener('touchstart', unlockAudio, { once: true });
+
+    // Play/pause control
+    playBtn.addEventListener('click', async () => {
+      try {
+        if (audioPlayer.paused) {
+          await audioPlayer.play();
+          playBtn.textContent = '⏸ Pause';
+        } else {
+          audioPlayer.pause();
+          playBtn.textContent = '▶ Play';
+        }
+      } catch (error) {
+        console.error("Playback error:", error);
+        alert('Please click anywhere on page first, then play');
+      }
     });
 
     // Gallery modal functionality
