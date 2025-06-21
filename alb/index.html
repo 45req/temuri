@@ -241,6 +241,10 @@
       opacity: 0.8;
     }
 
+    audio {
+      display: none; /* Hide controls */
+    }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translate(-50%, -45%); }
       to { opacity: 1; transform: translate(-50%, -50%); }
@@ -249,8 +253,9 @@
 </head>
 <body>
 <div class="cursor-dot" id="cursorDot"></div>
-<audio id="bgMusic" autoplay loop muted>
+<audio id="bgMusic" autoplay loop muted controls>
   <source src="./music.mp3" type="audio/mpeg">
+  <source src="./music.mp3" type="audio/mp3">
   Your browser does not support the audio tag.
 </audio>
 
@@ -291,20 +296,25 @@
 const cursorDot = document.getElementById('cursorDot');
 const audio = document.getElementById('bgMusic');
 
+// Function to start audio playback
+function startAudio() {
+  audio.muted = false;
+  audio.play().catch(error => console.log('Autoplay prevented:', error));
+}
+
+// Attempt to play on load
+startAudio();
+
+// Add multiple interaction listeners to ensure audio starts
+['click', 'mousemove', 'keydown'].forEach(event => {
+  document.addEventListener(event, startAudio, { once: true });
+});
+
 document.addEventListener('mousemove', (e) => {
   cursorDot.style.top = `${e.clientY}px`;
   cursorDot.style.left = `${e.clientX}px`;
   cursorDot.style.backgroundColor = `hsl(${e.clientX % 360}, 70%, 80%)`;
 });
-
-// Autoplay fix: Unmute and play on user interaction
-document.addEventListener('click', () => {
-  audio.muted = false;
-  audio.play().catch(error => console.log('Autoplay prevented:', error));
-}, { once: true });
-
-// Attempt to play on load
-audio.play().catch(error => console.log('Autoplay prevented:', error));
 
 // Background dots animation
 const canvas = document.getElementById("bg");
