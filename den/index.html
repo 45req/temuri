@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>syndn</title>
+  <title>Den#wokenK</title>
   <style>
     :root {
       --bg-primary: #36393f;
@@ -16,12 +16,28 @@
     
     body {
       margin: 0;
-      padding: 20px;
+      padding: 0;
       font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
       background-color: var(--bg-primary);
       color: var(--text-normal);
-      max-width: 1000px;
-      margin: 0 auto;
+    }
+    
+    .container {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 20px;
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+    
+    .profile-sidebar {
+      background-color: var(--bg-secondary);
+      border-radius: 8px;
+      padding: 20px;
+      position: sticky;
+      top: 20px;
+      height: fit-content;
     }
     
     .profile-header {
@@ -36,7 +52,7 @@
       border-radius: 50%;
       background-color: var(--bg-tertiary);
       margin-right: 15px;
-      background-image: url('screenshots/1.png');
+      background-image: url('pfp/pfp.png');
       background-size: cover;
       border: 4px solid var(--accent);
     }
@@ -52,11 +68,42 @@
       font-size: 14px;
     }
     
+    .profile-bio {
+      background-color: var(--bg-tertiary);
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+    
+    .music-player {
+      background-color: var(--bg-tertiary);
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+    
+    .music-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    
+    .music-btn {
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    
     .gallery {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 15px;
-      margin-top: 20px;
     }
     
     .gallery-item {
@@ -84,7 +131,7 @@
       width: 100vw;
       height: 100vh;
       background: rgba(0,0,0,0.95);
-      display: flex;
+      display: none;
       align-items: center;
       justify-content: center;
       z-index: 1000;
@@ -99,31 +146,75 @@
   </style>
 </head>
 <body>
-  <div class="profile-header">
-    <div class="profile-avatar"></div>
-    <div>
-      <div class="profile-name">syndn</div>
-      <div class="profile-tag">@syndn</div>
+  <div class="container">
+    <div class="profile-sidebar">
+      <div class="profile-header">
+        <div class="profile-avatar"></div>
+        <div>
+          <div class="profile-name">Den#wokenK
+</div>
+          <div class="profile-tag">syndn
+ig - d3nsync</div>
+        </div>
+      </div>
+      
+      <div class="profile-bio">
+        “About Me” those who know 💀💀💀
+      </div>
+      
+      <div class="music-player">
+        <div>Now Playing</div>
+        <div class="music-controls">
+          <button class="music-btn" id="play-btn">▶ Play</button>
+          <span id="timestamp">0:00 / 0:00</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="gallery">
+      <div class="gallery-item">
+        <img src="screenshots/1.png" alt="Screenshot 1">
+      </div>
+      <div class="gallery-item">
+        <img src="screenshots/2.png" alt="Screenshot 2">
+      </div>
+      <div class="gallery-item">
+        <img src="screenshots/3.png" alt="Screenshot 3">
+      </div>
     </div>
   </div>
 
-  <div class="gallery">
-    <div class="gallery-item">
-      <img src="screenshots/1.png" alt="Screenshot 1">
-    </div>
-    <div class="gallery-item">
-      <img src="screenshots/2.png" alt="Screenshot 2">
-    </div>
-    <div class="gallery-item">
-      <img src="screenshots/3.png" alt="Screenshot 3">
-    </div>
-  </div>
-
-  <div id="modal" style="display: none;">
+  <div id="modal">
     <img src="" alt="Enlarged view">
   </div>
 
+  <audio id="audio-player" src="../music/music.mp3"></audio>
+  
   <script>
+    // Music player functionality
+    const audioPlayer = document.getElementById('audio-player');
+    const playBtn = document.getElementById('play-btn');
+    const timestamp = document.getElementById('timestamp');
+    
+    playBtn.addEventListener('click', function() {
+      if (audioPlayer.paused) {
+        audioPlayer.play();
+        playBtn.textContent = '⏸ Pause';
+      } else {
+        audioPlayer.pause();
+        playBtn.textContent = '▶ Play';
+      }
+    });
+    
+    // Update timestamp
+    audioPlayer.addEventListener('timeupdate', function() {
+      const minutes = Math.floor(audioPlayer.currentTime / 60);
+      const seconds = Math.floor(audioPlayer.currentTime % 60);
+      timestamp.textContent = 
+        `${minutes}:${seconds < 10 ? '0' + seconds : seconds} / 3:42`;
+    });
+
+    // Gallery modal functionality
     const modal = document.getElementById('modal');
     const modalImg = modal.querySelector('img');
     
