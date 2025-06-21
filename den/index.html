@@ -185,28 +185,64 @@
   </div>
 
   <audio id="audio-player" loop>
-    <source src="../music/music.mp3" type="audio/mpeg" />
+    <source src="/music/music.mp3" type="audio/mpeg" />
+    Your browser does not support the audio element.
   </audio>
   
   <script>
-    // Music player functionality (copied from Temuri page)
+    // Improved music player functionality
     const audioPlayer = document.getElementById('audio-player');
     const playBtn = document.getElementById('play-btn');
     const timestamp = document.getElementById('timestamp');
     
-    playBtn.addEventListener('click', () => {
-      audioPlayer.play().then(() => {
-        playBtn.textContent = '■ Stop Music';
-        playBtn.addEventListener('click', function stopMusic() {
-          audioPlayer.pause();
-          audioPlayer.currentTime = 0;
-          playBtn.textContent = '▶ Play';
-          playBtn.removeEventListener('click', stopMusic);
-          playBtn.addEventListener('click', arguments.callee);
+    // First click handler to unlock audio
+    const unlockAudio = () => {
+      // Create a tiny silent audio context to unlock autoplay
+      const context = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = context.createOscillator();
+      oscillator.connect(context.destination);
+      oscillator.start();
+      oscillator.stop(context.currentTime + 0.001);
+      
+      // Remove this event listener after first interaction
+      document.body.removeEventListener('click', unlockAudio);
+      document.body.removeEventListener('touchstart', unlockAudio);
+    };
+    
+    // Set up initial event listeners to unlock audio
+    document.body.addEventListener('click', unlockAudio);
+    document.body.addEventListener('touchstart', unlockAudio);
+    
+    // Music player control
+    playBtn.addEventListener('click', function() {
+      // First check if we need to resume the AudioContext
+      if (audioPlayer.paused) {
+        audioPlayer.play().then(() => {
+          playBtn.textContent = '⏸ Pause';
+        }).catch(error => {
+          console.error("Playback failed:", error);
+          alert('Click anywhere on the page first, then try playing again.');
         });
-      }).catch(() => {
-        alert('Autoplay blocked. Please click play again.');
-      });
+      } else {
+        audioPlayer.pause();
+        playBtn.textContent = '▶ Play';
+      }
+    });
+    
+    // Update timestamp
+    audioPlayer.addEventListener('timeupdate', function() {
+      const minutes = Math.floor(audioPlayer.currentTime / 60);
+      const seconds = Math.floor(audioPlayer.currentTime % 60);
+      const durationMinutes = Math.floor(audioPlayer.duration / 60);
+      const durationSeconds = Math.floor(audioPlayer.duration % 60);
+      
+      timestamp.textContent = 
+        `${minutes}:${seconds < 10 ? '0' + seconds : seconds} / ${durationMinutes}:${durationSeconds < 10 ? '0' + durationSeconds : durationSeconds}`;
+    });
+    
+    // Handle when audio ends
+    audioPlayer.addEventListener('ended', function() {
+      playBtn.textContent = '▶ Play';
     });
 
     // Update timestamp
