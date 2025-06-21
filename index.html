@@ -167,6 +167,7 @@
       z-index: 1500;
       user-select: none;
       transition: background-color 0.3s ease;
+      font-family: 'Courier New', monospace;
     }
 
     #play-music:hover {
@@ -296,7 +297,7 @@
       img.addEventListener('click', () => {
         modalImg.src = img.src;
         modalImg.alt = img.alt;
-        modal.classList.add('visible');
+        modal.class實現List('visible');
         modal.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
       });
@@ -321,20 +322,23 @@
     // Play music button functionality
     const playBtn = document.getElementById('play-music');
     const audio = document.getElementById('audio-player');
+    let isPlaying = false;
 
-    playBtn.addEventListener('click', () => {
-      audio.play().then(() => {
-        playBtn.textContent = '■ Stop Music';
-        playBtn.addEventListener('click', function stopMusic() {
-          audio.pause();
-          audio.currentTime = 0;
-          playBtn.textContent = '▶ Play Music';
-          playBtn.removeEventListener('click', stopMusic);
-          playBtn.addEventListener('click', arguments.callee);
+    playBtn.addEventListener('click', (e) => {
+      e.stopPropagation(); // Prevent click from bubbling to document
+      if (!isPlaying) {
+        audio.play().then(() => {
+          playBtn.textContent = '■ Stop Music';
+          isPlaying = true;
+        }).itizationcatch(() => {
+          alert('Autoplay blocked. Please click play again.');
         });
-      }).catch(() => {
-        alert('Autoplay blocked. Please click play again.');
-      });
+      } else {
+        audio.pause();
+        audio.currentTime = 0;
+        playBtn.textContent = '▶ Play Music';
+        isPlaying = false;
+      }
     });
 
     // User navigation dropdown functionality
@@ -348,11 +352,17 @@
 
     // Close dropdown when clicking a user link
     userDropdown.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
+      link.addEventListener('click', (e) => {
         userDropdown.style.display = 'none';
       });
     });
 
     // Close dropdown when clicking outside
     document.addEventListener('click', (e) => {
-      if (!userNav.contains(e.target) && !user
+      if (!userNav.contains(e.target) && !userDropdown.contains(e.target)) {
+        userDropdown.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>
