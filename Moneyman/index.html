@@ -17,6 +17,7 @@
       font-family: 'Courier New', monospace;
       color: white;
       background: #000;
+      overflow-x: hidden;
       cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="white"/></svg>') 8 8, auto;
     }
 
@@ -98,7 +99,7 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 15px;
-      padding: 100px 20px 80px;
+      padding: 100px 20px 120px;
       width: 90%;
       margin: 0 auto;
     }
@@ -127,7 +128,6 @@
       display: none;
     }
 
-    /* Banner */
     .bottom-banner {
       position: fixed;
       bottom: 0;
@@ -141,6 +141,22 @@
       border-top: 1px solid var(--accent);
       z-index: 999;
     }
+
+    .music-player {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    audio {
+      width: 80%;
+      max-width: 400px;
+      filter: drop-shadow(0 0 5px var(--accent));
+    }
+
+    audio::-webkit-media-controls-panel {
+      background-color: #000;
+      color: var(--neon);
+    }
   </style>
 </head>
 <body>
@@ -153,6 +169,13 @@
 
   <!-- Main Content -->
   <div id="main-content">
+    <div class="music-player">
+      <audio controls autoplay loop>
+        <source src="Moneyman/music/music.mp3" type="audio/mpeg" />
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+
     <div class="gallery" id="gallery"></div>
   </div>
 
@@ -162,7 +185,6 @@
   </div>
 
   <script>
-    // RAIN EFFECT
     function createRain() {
       const rainContainer = document.getElementById('rain-container');
       for (let i = 0; i < 150; i++) {
@@ -175,12 +197,10 @@
       }
     }
 
-    // TYPEWRITER EFFECT
     function typeWriter() {
       const text = "CLICK TO ENTER";
       const element = document.getElementById('enter-text');
       let i = 0;
-
       function typing() {
         if (i < text.length) {
           element.innerHTML += text.charAt(i);
@@ -191,7 +211,6 @@
       typing();
     }
 
-    // PARTICLES
     function createParticles() {
       document.addEventListener('mousemove', (e) => {
         for (let i = 0; i < 3; i++) {
@@ -206,18 +225,33 @@
       });
     }
 
-    // GALLERY LOADER
     function loadGallery() {
       const gallery = document.getElementById('gallery');
-      for (let i = 1; i <= 8; i++) {
-        const item = document.createElement('div');
-        item.className = 'gallery-item';
-        item.innerHTML = `<img class="gallery-media" src="Moneyman/screenshots/${i}.png" alt="Image ${i}">`;
-        gallery.appendChild(item);
+      let i = 1;
+
+      function tryNext() {
+        const img = new Image();
+        img.src = `Moneyman/screenshots/${i}.png`;
+        img.onload = () => {
+          const item = document.createElement('div');
+          item.className = 'gallery-item';
+          item.innerHTML = `
+            <a href="${img.src}" target="_blank">
+              <img class="gallery-media" src="${img.src}" alt="Screenshot ${i}">
+            </a>
+          `;
+          gallery.appendChild(item);
+          i++;
+          tryNext(); // load next
+        };
+        img.onerror = () => {
+          // done
+        };
       }
+
+      tryNext();
     }
 
-    // INIT
     window.onload = function () {
       createRain();
       typeWriter();
