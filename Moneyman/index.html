@@ -57,12 +57,11 @@
       opacity: 0.5;
     }
 
-    /* Discord Widget Styles */
+    /* Discord Widget Styles - Top Left */
     #discord-widget {
       position: fixed;
       left: 20px;
-      top: 50%;
-      transform: translateY(-50%);
+      top: 20px;
       width: 300px;
       background: rgba(0, 0, 0, 0.8);
       border: 1px solid var(--accent);
@@ -76,61 +75,76 @@
     .discord-user {
       display: flex;
       align-items: center;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
     }
 
     .discord-avatar {
-      width: 60px;
-      height: 60px;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
       border: 2px solid var(--accent);
-      margin-right: 15px;
+      margin-right: 12px;
+    }
+
+    .discord-info {
+      flex-grow: 1;
+      min-width: 0;
     }
 
     .discord-username {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: bold;
-      margin-bottom: 5px;
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .discord-discriminator {
       color: #aaa;
-      font-size: 14px;
+      font-size: 13px;
     }
 
     .discord-status {
       display: flex;
       align-items: center;
       margin-top: 5px;
-      font-size: 14px;
+      font-size: 13px;
     }
 
     .status-indicator {
-      width: 10px;
-      height: 10px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
-      margin-right: 8px;
+      margin-right: 6px;
+      flex-shrink: 0;
     }
 
-    .online { background-color: #3ba55c; }
-    .idle { background-color: #faa61a; }
-    .dnd { background-color: #ed4245; }
-    .offline { background-color: #747f8d; }
+    .status-online { background-color: #3ba55c; }
+    .status-idle { background-color: #faa61a; }
+    .status-dnd { background-color: #ed4245; }
+    .status-offline { background-color: #747f8d; }
 
     .discord-activity {
-      margin-top: 15px;
-      padding-top: 15px;
+      margin-top: 10px;
+      padding-top: 10px;
       border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 13px;
     }
 
     .activity-name {
       font-weight: bold;
-      margin-bottom: 5px;
+      margin-bottom: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .activity-details {
-      font-size: 14px;
       color: #aaa;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     #entry-screen {
@@ -282,20 +296,20 @@
     </video>
   </div>
 
-  <!-- Discord Widget -->
+  <!-- Discord Widget - Top Left -->
   <div id="discord-widget">
     <div class="discord-user">
       <img id="discord-avatar" class="discord-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Discord Avatar">
-      <div>
+      <div class="discord-info">
         <div class="discord-username" id="discord-username">Loading...</div>
         <div class="discord-discriminator" id="discord-discriminator">#0000</div>
         <div class="discord-status">
-          <div class="status-indicator offline" id="status-indicator"></div>
+          <div class="status-indicator status-offline" id="status-indicator"></div>
           <span id="status-text">Offline</span>
         </div>
       </div>
     </div>
-    <div class="discord-activity" id="discord-activity">
+    <div class="discord-activity" id="discord-activity" style="display: none;">
       <div class="activity-name" id="activity-name"></div>
       <div class="activity-details" id="activity-details"></div>
     </div>
@@ -394,6 +408,11 @@
     }
 
     function updateDiscordWidget(data) {
+      if (!data || !data.success) {
+        console.error("Invalid data from Lanyard API");
+        return;
+      }
+
       const user = data.data.discord_user;
       const activities = data.data.activities;
       const status = data.data.discord_status;
@@ -404,31 +423,30 @@
         : `https://cdn.discordapp.com/embed/avatars/${parseInt(user.discriminator) % 5}.png`;
       document.getElementById('discord-avatar').src = avatarUrl;
 
-      // Update username
+      // Update username and discriminator
       document.getElementById('discord-username').textContent = user.username;
       document.getElementById('discord-discriminator').textContent = `#${user.discriminator}`;
 
       // Update status
       const statusIndicator = document.getElementById('status-indicator');
       const statusText = document.getElementById('status-text');
+      
+      // Reset all status classes
       statusIndicator.className = 'status-indicator';
       
-      switch(status) {
-        case 'online':
-          statusIndicator.classList.add('online');
-          statusText.textContent = 'Online';
-          break;
-        case 'idle':
-          statusIndicator.classList.add('idle');
-          statusText.textContent = 'Idle';
-          break;
-        case 'dnd':
-          statusIndicator.classList.add('dnd');
-          statusText.textContent = 'Do Not Disturb';
-          break;
-        default:
-          statusIndicator.classList.add('offline');
-          statusText.textContent = 'Offline';
+      // Add the appropriate status class
+      if (status === 'online') {
+        statusIndicator.classList.add('status-online');
+        statusText.textContent = 'Online';
+      } else if (status === 'idle') {
+        statusIndicator.classList.add('status-idle');
+        statusText.textContent = 'Idle';
+      } else if (status === 'dnd') {
+        statusIndicator.classList.add('status-dnd');
+        statusText.textContent = 'Do Not Disturb';
+      } else {
+        statusIndicator.classList.add('status-offline');
+        statusText.textContent = 'Offline';
       }
 
       // Update activity
@@ -438,7 +456,7 @@
 
       if (activities && activities.length > 0) {
         const activity = activities[0];
-        activityName.textContent = activity.name;
+        activityName.textContent = activity.name || 'Playing a game';
         activityDetails.textContent = activity.details || '';
         activityContainer.style.display = 'block';
       } else {
@@ -448,8 +466,19 @@
 
     function fetchDiscordData() {
       fetch("https://api.lanyard.rest/v1/users/1127640909643780146")
-        .then((res) => res.json())
-        .then(updateDiscordWidget)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (data.success) {
+            updateDiscordWidget(data);
+          } else {
+            console.error("API returned unsuccessful response");
+          }
+        })
         .catch(error => {
           console.error("Error fetching Discord data:", error);
         });
@@ -457,8 +486,8 @@
       // Refresh every 30 seconds
       setInterval(() => {
         fetch("https://api.lanyard.rest/v1/users/1127640909643780146")
-          .then((res) => res.json())
-          .then(updateDiscordWidget);
+          .then(response => response.json())
+          .then(data => updateDiscordWidget(data));
       }, 30000);
     }
 
