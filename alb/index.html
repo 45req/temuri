@@ -338,6 +338,17 @@
     resize();
     animate();
   </script>
+<script>
+  const bgMusic = new Audio('music/music.mp3');
+  bgMusic.volume = 0.5; // 50% volume
+  bgMusic.loop = true;
+  bgMusic.autoplay = true;
+  bgMusic.play().catch(() => {
+    // Autoplay may fail without user interaction; optional fallback here
+    console.log("Autoplay blocked. Waiting for user interaction.");
+  });
+</script>
+
 <audio autoplay loop hidden>
   <source src="alb/music/music.mp3" type="audio/mpeg">
   Your browser does not support the audio element.
