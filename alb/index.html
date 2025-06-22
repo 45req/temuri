@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ALB</title>
+  <title>albe</title>
   <style>
     * {
       margin: 0;
@@ -14,8 +14,8 @@
       width: 100%;
       height: 100%;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #121212;
-      color: white;
+      background-color: #0f0f13;
+      color: #e6e6ff;
       overflow: hidden;
       position: relative;
       cursor: none;
@@ -24,14 +24,16 @@
       position: fixed;
       top: 0;
       left: 0;
-      width: 10px;
-      height: 10px;
-      background-color: #ffffff;
+      width: 12px;
+      height: 12px;
+      background-color: #9b59b6;
       border-radius: 50%;
       pointer-events: none;
       z-index: 1000;
       transform: translate(-50%, -50%);
       transition: transform 0.05s linear, background-color 0.3s ease;
+      box-shadow: 0 0 8px #9b59b6;
+      mix-blend-mode: screen;
     }
     #bg {
       position: fixed;
@@ -40,46 +42,63 @@
       width: 100vw;
       height: 100vh;
       z-index: 0;
+      background:
+        linear-gradient(90deg, rgba(155,89,182,0.05) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(155,89,182,0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+      animation: gridPulse 6s ease-in-out infinite;
+      filter: drop-shadow(0 0 3px #9b59b6);
+    }
+    @keyframes gridPulse {
+      0%, 100% {
+        background-position: 0 0, 0 0;
+      }
+      50% {
+        background-position: 20px 20px, 20px 20px;
+      }
     }
     .profile-wrapper {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: #1e1e1e;
+      background: #1b1332;
       width: 380px;
       border-radius: 16px;
-      box-shadow: 0 0 20px rgba(88, 101, 242, 0.5);
+      box-shadow: 0 0 20px #9b59b6cc;
       overflow: hidden;
-      animation: pulse 4s infinite ease-in-out;
+      animation: pulseGlow 4s infinite ease-in-out;
       z-index: 2;
       transition: transform 0.2s ease, box-shadow 0.3s ease;
+      border: 1.5px solid #9b59b6;
+      color: #ddd9ff;
     }
     .profile-wrapper:hover {
-      transform: translate(-50%, -50%) scale(1.02);
+      transform: translate(-50%, -50%) scale(1.04);
+      box-shadow: 0 0 35px #b166ffcc;
     }
-    @keyframes pulse {
+    @keyframes pulseGlow {
       0%, 100% {
-        box-shadow: 0 0 20px rgba(88, 101, 242, 0.5);
+        box-shadow: 0 0 20px #9b59b6cc;
       }
       50% {
-        box-shadow: 0 0 30px rgba(88, 101, 242, 0.9);
+        box-shadow: 0 0 35px #b166ffcc;
       }
     }
     .banner {
       height: 140px;
-      background: url("https://images.discordapp.net/banners/669209954200191006/a_6acbde582a352819613d4f90ab0a9cca.gif?size=1024") center/cover no-repeat;
+      background: url("https://i.imgur.com/vcuTgEr.gif") center/cover no-repeat; /* glitchy neon style banner */
       position: relative;
+      filter: brightness(0.8) contrast(1.2);
     }
     .banner::after {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, rgba(88, 101, 242, 0.2), rgba(0, 170, 255, 0.2));
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, rgba(155,89,182,0.3), rgba(106,76,147,0.3));
       pointer-events: none;
+      mix-blend-mode: overlay;
     }
     .avatar-container {
       position: absolute;
@@ -87,19 +106,22 @@
       left: 20px;
       width: 96px;
       height: 96px;
+      filter: drop-shadow(0 0 5px #b166ff);
     }
     .avatar {
       width: 96px;
       height: 96px;
       border-radius: 50%;
-      border: 4px solid #2b2d31;
+      border: 4px solid #2b1f44;
       background: url('https://cdn.discordapp.com/avatars/669209954200191006/f953225437d7e699403e2d7148630493.png?size=512') no-repeat center/cover;
       position: relative;
       z-index: 1;
-      transition: transform 0.3s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 0 8px #9b59b6;
     }
     .avatar:hover {
-      transform: scale(1.1);
+      transform: scale(1.12);
+      box-shadow: 0 0 20px #d98eff;
     }
     .deco {
       position: absolute;
@@ -110,23 +132,29 @@
       background: url('https://cdn.jsdelivr.net/gh/itspi3141/discord-fake-avatar-decorations@main/public/decorations/neon_nibbles.png') no-repeat center/contain;
       pointer-events: none;
       z-index: 2;
+      filter: drop-shadow(0 0 8px #9b59b6);
+      mix-blend-mode: screen;
     }
     .info {
       padding: 60px 20px 20px 20px;
       text-align: left;
+      font-weight: 500;
     }
     .username {
-      font-size: 24px;
+      font-size: 28px;
       font-weight: 700;
       margin-bottom: 6px;
+      color: #d3cfff;
       transition: color 0.3s ease;
+      text-shadow: 0 0 6px #b166ff;
     }
     .username:hover {
-      color: #66d9ff;
+      color: #f0eaff;
+      text-shadow: 0 0 12px #d98eff;
     }
     .tag {
       font-size: 14px;
-      color: #b5bac1;
+      color: #b3a7d1;
       position: relative;
       display: inline-block;
     }
@@ -141,15 +169,16 @@
       top: -30px;
       left: 50%;
       transform: translateX(-50%);
-      background: #1e1f22;
-      color: #ffffff;
+      background: #2a2043;
+      color: #ddd9ff;
       padding: 5px 10px;
       border-radius: 6px;
       font-size: 12px;
       white-space: nowrap;
       z-index: 10;
-      border: 1px solid #5865f2;
+      border: 1px solid #9b59b6;
       transition: opacity 0.2s ease, visibility 0.2s ease;
+      text-shadow: none;
     }
     .badges img {
       height: 20px;
@@ -157,33 +186,39 @@
       vertical-align: middle;
       transition: transform 0.3s ease, filter 0.3s ease;
       cursor: default;
+      filter: drop-shadow(0 0 4px #b166ff);
     }
     .badges img:hover {
       transform: scale(1.2);
-      filter: brightness(1.3);
+      filter: brightness(1.6) drop-shadow(0 0 8px #d98eff);
     }
     .link {
       display: block;
       margin: 10px 0;
-      color: #00aaff;
+      color: #9b59b6;
       text-decoration: none;
       font-size: 14px;
       transition: color 0.3s ease, transform 0.3s ease;
+      text-shadow: 0 0 6px #b166ff;
     }
     .link:hover {
-      color: #66d9ff;
-      transform: translateX(5px);
+      color: #d98eff;
+      transform: translateX(6px);
+      text-shadow: 0 0 12px #d98eff;
     }
     .connections {
       margin-top: 15px;
-      border-top: 1px solid #40444b;
+      border-top: 1px solid #3c2f63;
       padding-top: 10px;
+      color: #b3a7d1;
+      font-weight: 500;
     }
     .connections strong {
       display: block;
       margin-bottom: 5px;
       font-size: 14px;
-      color: #b5bac1;
+      color: #b3a7d1;
+      text-shadow: 0 0 3px #9b59b6;
     }
     .connection {
       display: flex;
@@ -195,13 +230,14 @@
       height: 20px;
       margin-right: 8px;
       transition: transform 0.3s ease, filter 0.3s ease;
+      filter: drop-shadow(0 0 4px #9b59b6);
     }
     .connection img:hover {
       transform: scale(1.2);
-      filter: brightness(1.3);
+      filter: brightness(1.6) drop-shadow(0 0 8px #d98eff);
     }
     .connection a {
-      color: white;
+      color: #ddd9ff;
       text-decoration: none;
       transition: opacity 0.3s ease;
     }
@@ -240,6 +276,7 @@
         <div class="connection">
           <img src="https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/0/e/e/0eeeb19633422b1241f4306419a0f15f39d58de9.png" alt="Roblox" />
           <a href="https://www.roblox.com/home" target="_blank" rel="noopener noreferrer">Roblox</a>
+		  
         </div>
       </div>
     </div>
@@ -251,107 +288,12 @@
     document.addEventListener('mousemove', (e) => {
       cursorDot.style.top = e.clientY + 'px';
       cursorDot.style.left = e.clientX + 'px';
-      cursorDot.style.backgroundColor = hsl(${e.clientX % 360}, 70%, 80%);
+      cursorDot.style.backgroundColor = `hsl(${(e.clientX + e.clientY) % 360}, 70%, 75%)`;
     });
-
-    // Background dots animation
-    const canvas = document.getElementById('bg');
-    const ctx = canvas.getContext('2d');
-    let w, h;
-    const dots = [];
-    const DOT_COUNT = 70;
-
-    function Dot() {
-      this.x = Math.random() * w;
-      this.y = Math.random() * h;
-      this.size = Math.random() * 1.5 + 0.5;
-      this.speedX = (Math.random() - 0.5) * 0.2;
-      this.speedY = (Math.random() - 0.5) * 0.2;
-      this.color = rgba(88, 101, 242, ${Math.random() * 0.7 + 0.3});
-
-      this.draw = function () {
-        ctx.beginPath();
-        ctx.fillStyle = this.color;
-        ctx.shadowColor = 'rgba(88, 101, 242, 0.8)';
-        ctx.shadowBlur = 8;
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.closePath();
-      };
-
-      this.update = function () {
-        this.x += this.speedX;
-        this.y += this.speedY;
-
-        if (this.x < 0 || this.x > w) this.speedX = -this.speedX;
-        if (this.y < 0 || this.y > h) this.speedY = -this.speedY;
-      };
-    }
-
-    function initDots() {
-      dots.length = 0;
-      for (let i = 0; i < DOT_COUNT; i++) {
-        dots.push(new Dot());
-      }
-    }
-
-    function resize() {
-      w = window.innerWidth;
-      h = window.innerHeight;
-      canvas.width = w;
-      canvas.height = h;
-      initDots();
-    }
-
-    function animate() {
-      ctx.clearRect(0, 0, w, h);
-
-      // Draw dots
-      dots.forEach(dot => {
-        dot.update();
-        dot.draw();
-      });
-
-      // Draw lines between close dots
-      for (let i = 0; i < dots.length; i++) {
-        for (let j = i + 1; j < dots.length; j++) {
-          const dx = dots[i].x - dots[j].x;
-          const dy = dots[i].y - dots[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-
-          if (dist < 120) {
-            ctx.beginPath();
-            ctx.strokeStyle = rgba(88, 101, 242, ${(120 - dist) / 120 * 0.3});
-            ctx.lineWidth = 1;
-            ctx.moveTo(dots[i].x, dots[i].y);
-            ctx.lineTo(dots[j].x, dots[j].y);
-            ctx.stroke();
-            ctx.closePath();
-          }
-        }
-      }
-
-      requestAnimationFrame(animate);
-    }
-
-    window.addEventListener('resize', resize);
-    resize();
-    animate();
   </script>
-<script>
-  const bgMusic = new Audio('alb/music/music.mp3');
-  bgMusic.volume = 0.5; // 50% volume
-  bgMusic.loop = true;
-  bgMusic.autoplay = true;
-  bgMusic.play().catch(() => {
-    // Autoplay may fail without user interaction; optional fallback here
-    console.log("Autoplay blocked. Waiting for user interaction.");
-  });
-</script>
-
 <audio autoplay loop hidden>
   <source src="alb/music/music.mp3" type="audio/mpeg">
   Your browser does not support the audio element.
 </audio>
 </body>
-</html
+</html>
