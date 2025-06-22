@@ -3,42 +3,219 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Alb</title>
+  <title>ALB</title>
   <style>
-    /* ... [your original styles] ... */
-    /* Add this at the bottom of your <style> tag: */
-    .volume-toggle {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      background: #1e1f22;
-      border: 1px solid #5865f2;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      font-size: 20px;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #121212;
       color: white;
+      overflow: hidden;
+      position: relative;
+      cursor: none;
+    }
+    .cursor-dot {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 10px;
+      height: 10px;
+      background-color: #ffffff;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1000;
+      transform: translate(-50%, -50%);
+      transition: transform 0.05s linear, background-color 0.3s ease;
+    }
+    #bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+    }
+    .profile-wrapper {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #1e1e1e;
+      width: 380px;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(88, 101, 242, 0.5);
+      overflow: hidden;
+      animation: pulse 4s infinite ease-in-out;
+      z-index: 2;
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+    }
+    .profile-wrapper:hover {
+      transform: translate(-50%, -50%) scale(1.02);
+    }
+    @keyframes pulse {
+      0%, 100% {
+        box-shadow: 0 0 20px rgba(88, 101, 242, 0.5);
+      }
+      50% {
+        box-shadow: 0 0 30px rgba(88, 101, 242, 0.9);
+      }
+    }
+    .banner {
+      height: 140px;
+      background: url("https://images.discordapp.net/banners/669209954200191006/a_6acbde582a352819613d4f90ab0a9cca.gif?size=1024") center/cover no-repeat;
+      position: relative;
+    }
+    .banner::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(88, 101, 242, 0.2), rgba(0, 170, 255, 0.2));
+      pointer-events: none;
+    }
+    .avatar-container {
+      position: absolute;
+      bottom: -42px;
+      left: 20px;
+      width: 96px;
+      height: 96px;
+    }
+    .avatar {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      border: 4px solid #2b2d31;
+      background: url('https://cdn.discordapp.com/avatars/669209954200191006/f953225437d7e699403e2d7148630493.png?size=512') no-repeat center/cover;
+      position: relative;
+      z-index: 1;
+      transition: transform 0.3s ease;
+    }
+    .avatar:hover {
+      transform: scale(1.1);
+    }
+    .deco {
+      position: absolute;
+      top: -12px;
+      left: -12px;
+      width: 120px;
+      height: 120px;
+      background: url('https://cdn.jsdelivr.net/gh/itspi3141/discord-fake-avatar-decorations@main/public/decorations/neon_nibbles.png') no-repeat center/contain;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .info {
+      padding: 60px 20px 20px 20px;
+      text-align: left;
+    }
+    .username {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      transition: color 0.3s ease;
+    }
+    .username:hover {
+      color: #66d9ff;
+    }
+    .tag {
+      font-size: 14px;
+      color: #b5bac1;
+      position: relative;
+      display: inline-block;
+    }
+    .tag:hover .tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
+    .tooltip {
+      visibility: hidden;
+      opacity: 0;
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1e1f22;
+      color: #ffffff;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      white-space: nowrap;
+      z-index: 10;
+      border: 1px solid #5865f2;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
+    }
+    .badges img {
+      height: 20px;
+      margin-left: 6px;
+      vertical-align: middle;
+      transition: transform 0.3s ease, filter 0.3s ease;
+      cursor: default;
+    }
+    .badges img:hover {
+      transform: scale(1.2);
+      filter: brightness(1.3);
+    }
+    .link {
+      display: block;
+      margin: 10px 0;
+      color: #00aaff;
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+    .link:hover {
+      color: #66d9ff;
+      transform: translateX(5px);
+    }
+    .connections {
+      margin-top: 15px;
+      border-top: 1px solid #40444b;
+      padding-top: 10px;
+    }
+    .connections strong {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 14px;
+      color: #b5bac1;
+    }
+    .connection {
       display: flex;
       align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 10;
-      box-shadow: 0 0 10px rgba(88, 101, 242, 0.4);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      margin-top: 5px;
     }
-    .volume-toggle:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 15px rgba(88, 101, 242, 0.8);
+    .connection img {
+      width: 20px;
+      height: 20px;
+      margin-right: 8px;
+      transition: transform 0.3s ease, filter 0.3s ease;
+    }
+    .connection img:hover {
+      transform: scale(1.2);
+      filter: brightness(1.3);
+    }
+    .connection a {
+      color: white;
+      text-decoration: none;
+      transition: opacity 0.3s ease;
+    }
+    .connection a:hover {
+      opacity: 0.8;
     }
   </style>
 </head>
 <body>
   <div class="cursor-dot" id="cursorDot"></div>
+
   <canvas id="bg"></canvas>
 
-  <!-- Your profile card -->
   <div class="profile-wrapper">
-    <!-- ... [banner/avatar/etc.] ... -->
     <div class="banner">
       <div class="avatar-container">
         <div class="avatar"></div>
@@ -55,7 +232,9 @@
           <img src="https://cdn3.emoji.gg/emojis/66366-completed-a-quest.png" title="Quest Completed" alt="Quest">
         </span>
       </div>
+
       <a class="link" href="https://temuri.pics/" target="_blank" rel="noopener noreferrer">https://temuri.pics/</a>
+
       <div class="connections">
         <strong>Connections</strong>
         <div class="connection">
@@ -66,20 +245,16 @@
     </div>
   </div>
 
-  <!-- 🔊 Volume toggle button -->
-  <div class="volume-toggle" id="volumeToggle" title="Toggle Volume">🔊</div>
-
-  <!-- Scripts -->
   <script>
-    // Cursor dot
+    // Cursor dot follow
     const cursorDot = document.getElementById('cursorDot');
     document.addEventListener('mousemove', (e) => {
       cursorDot.style.top = e.clientY + 'px';
       cursorDot.style.left = e.clientX + 'px';
-      cursorDot.style.backgroundColor = `hsl(${e.clientX % 360}, 70%, 80%)`;
+      cursorDot.style.backgroundColor = hsl(${e.clientX % 360}, 70%, 80%);
     });
 
-    // Background dots
+    // Background dots animation
     const canvas = document.getElementById('bg');
     const ctx = canvas.getContext('2d');
     let w, h;
@@ -92,7 +267,7 @@
       this.size = Math.random() * 1.5 + 0.5;
       this.speedX = (Math.random() - 0.5) * 0.2;
       this.speedY = (Math.random() - 0.5) * 0.2;
-      this.color = `rgba(88, 101, 242, ${Math.random() * 0.7 + 0.3})`;
+      this.color = rgba(88, 101, 242, ${Math.random() * 0.7 + 0.3});
 
       this.draw = function () {
         ctx.beginPath();
@@ -107,6 +282,7 @@
       this.update = function () {
         this.x += this.speedX;
         this.y += this.speedY;
+
         if (this.x < 0 || this.x > w) this.speedX = -this.speedX;
         if (this.y < 0 || this.y > h) this.speedY = -this.speedY;
       };
@@ -129,19 +305,23 @@
 
     function animate() {
       ctx.clearRect(0, 0, w, h);
+
+      // Draw dots
       dots.forEach(dot => {
         dot.update();
         dot.draw();
       });
 
+      // Draw lines between close dots
       for (let i = 0; i < dots.length; i++) {
         for (let j = i + 1; j < dots.length; j++) {
           const dx = dots[i].x - dots[j].x;
           const dy = dots[i].y - dots[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
+
           if (dist < 120) {
             ctx.beginPath();
-            ctx.strokeStyle = `rgba(88, 101, 242, ${(120 - dist) / 120 * 0.3})`;
+            ctx.strokeStyle = rgba(88, 101, 242, ${(120 - dist) / 120 * 0.3});
             ctx.lineWidth = 1;
             ctx.moveTo(dots[i].x, dots[i].y);
             ctx.lineTo(dots[j].x, dots[j].y);
@@ -158,30 +338,20 @@
     resize();
     animate();
   </script>
+<script>
+  const bgMusic = new Audio('alb/music/music.mp3');
+  bgMusic.volume = 0.5; // 50% volume
+  bgMusic.loop = true;
+  bgMusic.autoplay = true;
+  bgMusic.play().catch(() => {
+    // Autoplay may fail without user interaction; optional fallback here
+    console.log("Autoplay blocked. Waiting for user interaction.");
+  });
+</script>
 
-  <script>
-    const bgMusic = new Audio('alb/music/music.mp3');
-    bgMusic.volume = 0.5;
-    bgMusic.loop = true;
-    bgMusic.autoplay = true;
-    bgMusic.play().catch(() => {
-      console.log("Autoplay blocked. Waiting for user interaction.");
-    });
-
-    const volumeToggle = document.getElementById('volumeToggle');
-    let isMuted = false;
-
-    volumeToggle.addEventListener('click', () => {
-      isMuted = !isMuted;
-      bgMusic.volume = isMuted ? 0 : 0.5;
-      volumeToggle.textContent = isMuted ? '🔇' : '🔊';
-    });
-  </script>
-
-  <!-- Backup audio element (optional) -->
-  <audio autoplay loop hidden>
-    <source src="alb/music/music.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
+<audio autoplay loop hidden>
+  <source src="alb/music/music.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
 </body>
-</html>
+</html
