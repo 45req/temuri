@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Basic Open Graph meta tags -->
+  <!-- Open Graph -->
   <meta property="og:title" content="GOAT" />
-  <meta property="og:description" content="Moneyman(G.O.A.T)" />
+  <meta property="og:description" content="Moneyman (G.O.A.T)" />
   <meta property="og:image" content="https://temuri.pics/Moneyman/screenshots/10.png" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://temuri.pics/Moneyman" />
 
-  <!-- Twitter card tags (optional but recommended) -->
+  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="My Friend: Temuri" />
   <meta name="twitter:description" content="Evidence screenshots and info about Temuri." />
   <meta name="twitter:image" content="https://temuri.pics/screenshots/1.png" />
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MoneyMan ♂ (G.O.A.T)</title>
+
   <style>
     :root {
       --accent: #00ff88;
@@ -23,243 +25,162 @@
       --glow: 0 0 15px var(--accent);
     }
 
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      padding: 0;
       font-family: 'Courier New', monospace;
-      color: white;
       background: #000;
+      color: white;
       overflow-x: hidden;
       cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="white"/></svg>') 8 8, auto;
     }
 
+    /* Video Background */
     #video-container {
       position: fixed;
-      top: 0;
-      left: 0;
+      top: 0; left: 0;
       width: 100%;
       height: 100%;
       overflow: hidden;
       z-index: -1;
     }
-
     #video-background {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0.5);
-      width: 100%;
-      height: 100%;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      min-width: 100%;
+      min-height: 100%;
       object-fit: cover;
-      filter: blur(10px);
-      opacity: 0.5;
+      filter: blur(8px) brightness(0.6);
     }
 
-    /* Discord Widget Styles - Top Left */
+    /* Discord Widget */
     #discord-widget {
       position: fixed;
-      left: 20px;
-      top: 20px;
+      top: 20px; left: 20px;
       width: 300px;
       background: rgba(0, 0, 0, 0.8);
       border: 1px solid var(--accent);
       border-radius: 10px;
       padding: 15px;
-      box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
-      z-index: 900;
-      backdrop-filter: blur(5px);
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+      backdrop-filter: blur(6px);
+      transition: transform 0.2s ease-in-out;
+    }
+    #discord-widget:hover {
+      transform: translateY(-2px);
     }
 
     .discord-user {
       display: flex;
       align-items: center;
-      margin-bottom: 10px;
     }
-
     .discord-avatar {
-      width: 50px;
-      height: 50px;
+      width: 50px; height: 50px;
       border-radius: 50%;
       border: 2px solid var(--accent);
       margin-right: 12px;
     }
-
-    .discord-info {
-      flex-grow: 1;
-      min-width: 0;
-    }
-
     .discord-username {
-      font-size: 16px;
       font-weight: bold;
-      margin-bottom: 2px;
-      white-space: nowrap;
+      font-size: 1.1rem;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-
     .discord-discriminator {
       color: #aaa;
-      font-size: 13px;
+      font-size: 0.9rem;
     }
-
-    .discord-status {
-      display: flex;
-      align-items: center;
-      margin-top: 5px;
-      font-size: 13px;
-    }
-
     .status-indicator {
-      width: 8px;
-      height: 8px;
+      width: 10px; height: 10px;
       border-radius: 50%;
       margin-right: 6px;
-      flex-shrink: 0;
     }
+    .status-online { background: #3ba55c; }
+    .status-idle { background: #faa61a; }
+    .status-dnd { background: #ed4245; }
+    .status-offline { background: #747f8d; }
 
-    .status-online { background-color: #3ba55c; }
-    .status-idle { background-color: #faa61a; }
-    .status-dnd { background-color: #ed4245; }
-    .status-offline { background-color: #747f8d; }
-
-    .discord-activity {
-      margin-top: 10px;
-      padding-top: 10px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      font-size: 13px;
-    }
-
-    .activity-name {
-      font-weight: bold;
-      margin-bottom: 3px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .activity-details {
-      color: #aaa;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
+    /* Entry Screen */
     #entry-screen {
       position: fixed;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.7);
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       z-index: 1000;
-      transition: 0.5s;
+      animation: fadeIn 0.8s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     #glitch-text {
-      font-size: 4rem;
+      font-size: clamp(2rem, 6vw, 4rem);
       position: relative;
       text-align: center;
+      text-shadow: 0 0 5px var(--accent), 0 0 15px var(--neon);
     }
 
-    #glitch-text::before,
-    #glitch-text::after {
-      content: "Moneyman(G.O.A.T)";
-      position: absolute;
-      left: 0;
-    }
-
-    #glitch-text::before {
-      color: var(--neon);
-      animation: glitch-effect 3s infinite;
-      clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
-    }
-
-    #glitch-text::after {
-      color: var(--accent);
-      animation: glitch-effect 2s infinite reverse;
-      clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
-    }
-
-    @keyframes glitch-effect {
-      0% { transform: translate(0); }
-      20% { transform: translate(-5px, 5px); }
-      40% { transform: translate(-5px, -5px); }
-      60% { transform: translate(5px, 5px); }
-      80% { transform: translate(5px, -5px); }
-      100% { transform: translate(0); }
-    }
-
+    /* Rain Effect */
     .rain {
       position: absolute;
       top: -20px;
-      width: 1px;
-      height: 20px;
+      width: 1px; height: 20px;
       background: linear-gradient(to bottom, transparent, var(--neon));
       animation: rain-fall linear infinite;
-      opacity: 0.6;
+      opacity: 0.5;
     }
-
     @keyframes rain-fall {
       to { transform: translateY(100vh); }
     }
 
-    .particle {
-      position: fixed;
-      font-size: 14px;
-      pointer-events: none;
-      z-index: 100;
-      opacity: 0.9;
-      text-shadow: 0 0 10px var(--neon), 0 0 20px var(--accent);
-      animation: particle-fade 1.5s ease-out forwards;
-    }
-
-    @keyframes particle-fade {
-      0% { opacity: 0.9; transform: scale(1) translate(0, 0) rotate(0deg); }
-      100% { opacity: 0; transform: scale(0.5) translate(var(--tx), var(--ty)) rotate(var(--rotate)); }
-    }
-
+    /* Gallery */
     .gallery {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 15px;
-      padding: 100px 20px 120px;
-      width: 90%;
+      padding: 100px 20px;
+      max-width: 1400px;
       margin: 0 auto;
     }
-
     .gallery-item {
-      position: relative;
-      border-radius: 5px;
       overflow: hidden;
-      box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
-      transition: all 0.3s;
-      aspect-ratio: 1;
-      background: rgba(0, 0, 0, 0.7);
+      border-radius: 8px;
+      box-shadow: 0 0 12px rgba(0, 255, 136, 0.4);
+      transition: transform 0.3s ease;
     }
-
+    .gallery-item:hover {
+      transform: scale(1.05);
+    }
     .gallery-media {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.5s;
+      display: block;
     }
 
-    .gallery-item:hover .gallery-media {
-      transform: scale(1.1);
+    /* Music Player */
+    .music-player {
+      text-align: center;
+      margin-top: 40px;
+    }
+    audio {
+      width: 80%;
+      max-width: 400px;
+      filter: drop-shadow(0 0 5px var(--accent));
     }
 
-    #main-content {
-      display: none;
-    }
-
+    /* Bottom Banner */
     .bottom-banner {
       position: fixed;
-      bottom: 0;
-      left: 0;
+      bottom: 0; left: 0;
       width: 100%;
       background: rgba(0, 0, 0, 0.85);
       text-align: center;
@@ -267,80 +188,50 @@
       font-size: 14px;
       color: var(--neon);
       border-top: 1px solid var(--accent);
-      z-index: 999;
-    }
-
-    .music-player {
-      text-align: center;
-      margin-top: 40px;
-    }
-
-    audio {
-      width: 80%;
-      max-width: 400px;
-      filter: drop-shadow(0 0 5px var(--accent));
-    }
-
-    audio::-webkit-media-controls-panel {
-      background-color: #000;
-      color: var(--neon);
     }
   </style>
 </head>
 <body>
-  <!-- Video Background Container -->
   <div id="video-container">
     <video id="video-background" autoplay muted loop playsinline>
       <source src="Moneyman/screenshots/background.mov" type="video/mp4">
       <source src="Moneyman/screenshots/background.webm" type="video/webm">
-      Your browser does not support the video tag.
     </video>
   </div>
 
-  <!-- Discord Widget - Top Left -->
   <div id="discord-widget">
     <div class="discord-user">
-      <img id="discord-avatar" class="discord-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Discord Avatar">
-      <div class="discord-info">
-        <div class="discord-username" id="discord-username">Loading...</div>
-        <div class="discord-discriminator" id="discord-discriminator">#0000</div>
-        <div class="discord-status">
-          <div class="status-indicator status-offline" id="status-indicator"></div>
+      <img id="discord-avatar" class="discord-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="">
+      <div>
+        <div id="discord-username">Loading...</div>
+        <div id="discord-discriminator">#0000</div>
+        <div style="display:flex;align-items:center;">
+          <div id="status-indicator" class="status-indicator status-offline"></div>
           <span id="status-text">Offline</span>
         </div>
       </div>
     </div>
-    <div class="discord-activity" id="discord-activity" style="display: none;">
-      <div class="activity-name" id="activity-name"></div>
-      <div class="activity-details" id="activity-details"></div>
-    </div>
   </div>
 
-  <!-- Entry Screen -->
   <div id="entry-screen">
     <h1 id="glitch-text">MONEYMAN</h1>
-    <p id="enter-text"></p>
+    <p id="enter-text">CLICK TO ENTER</p>
     <div id="rain-container"></div>
   </div>
 
-  <!-- Main Content -->
-  <div id="main-content">
+  <div id="main-content" style="display:none;">
     <div class="music-player">
-      <audio controls id="audio-player" autoplay loop>
+      <audio controls autoplay loop>
         <source src="Moneyman/music/music.mp3" type="audio/mpeg" />
-        Your browser does not support the audio element.
       </audio>
     </div>
-
     <div class="gallery" id="gallery"></div>
   </div>
 
-  <!-- Bottom Banner -->
-  <div class="bottom-banner">
-    G.O.A.T
-  </div>
+  <div class="bottom-banner">G.O.A.T</div>
 
   <script>
+    // Rain
     function createRain() {
       const rainContainer = document.getElementById('rain-container');
       for (let i = 0; i < 150; i++) {
@@ -353,196 +244,33 @@
       }
     }
 
-    function typeWriter() {
-      const text = "CLICK TO ENTER";
-      const element = document.getElementById('enter-text');
-      let i = 0;
-      function typing() {
-        if (i < text.length) {
-          element.innerHTML += text.charAt(i);
-          i++;
-          setTimeout(typing, 100);
-        }
-      }
-      typing();
-    }
-
-    function createParticles() {
-      const emojis = ['💸', '🤑', '💰', '🎰', '⭐']; // Moneyman-themed emojis
-      let emojiIndex = 0;
-      let lastSpawn = 0;
-      const spawnInterval = 50; // Spawn every 50ms
-      const maxParticles = 50; // Max particles on screen
-
-      document.addEventListener('mousemove', (e) => {
-        const now = Date.now();
-        if (now - lastSpawn < spawnInterval) return; // Throttle spawns
-        lastSpawn = now;
-
-        // Check particle count
-        const currentParticles = document.querySelectorAll('.particle');
-        if (currentParticles.length >= maxParticles) return;
-
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.textContent = emojis[emojiIndex]; // Cycle through emojis
-        emojiIndex = (emojiIndex + 1) % emojis.length; // Loop emojis
-
-        // Randomize size (10px to 20px)
-        const size = Math.random() * 10 + 10;
-        particle.style.fontSize = `${size}px`;
-
-        // Randomize rotation
-        const rotate = Math.random() * 360;
-        particle.style.setProperty('--rotate', `${rotate}deg`);
-
-        // Position at cursor
-        particle.style.left = `${e.clientX}px`;
-        particle.style.top = `${e.clientY}px`;
-
-        // Randomize motion (slight spread, upward bias)
-        const tx = (Math.random() - 0.5) * 20; // Horizontal: -10 to 10px
-        const ty = (Math.random() - 0.5) * -30; // Vertical: -30 to 0px
-        particle.style.setProperty('--tx', `${tx}px`);
-        particle.style.setProperty('--ty', `${ty}px`);
-
-        document.body.appendChild(particle);
-
-        // Remove after animation
-        setTimeout(() => particle.remove(), 1500);
-      });
-    }
-
+    // Gallery Loader
     function loadGallery() {
       const gallery = document.getElementById('gallery');
       let i = 1;
-
-      function tryNext() {
+      (function loadNext() {
         const img = new Image();
         img.src = `Moneyman/screenshots/${i}.png`;
         img.onload = () => {
           const item = document.createElement('div');
           item.className = 'gallery-item';
-          item.innerHTML = `
-            <a href="${img.src}" target="_blank">
-              <img class="gallery-media" src="${img.src}" alt="Screenshot ${i}">
-            </a>`;
+          item.innerHTML = `<a href="${img.src}" target="_blank">
+            <img class="gallery-media" src="${img.src}" alt="Screenshot ${i}">
+          </a>`;
           gallery.appendChild(item);
           i++;
-          tryNext(); // Load next image
+          loadNext();
         };
-        img.onerror = () => {
-          // Stop when no more images are found
-        };
-      }
-
-      tryNext();
+      })();
     }
 
-    function updateDiscordWidget(data) {
-      if (!data || !data.success) {
-        console.error("Invalid data from Lanyard API");
-        return;
-      }
-
-      const user = data.data.discord_user;
-      const activities = data.data.activities;
-      const status = data.data.discord_status;
-
-      // Update avatar
-      const avatarUrl = user.avatar 
-        ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`
-        : `https://cdn.discordapp.com/embed/avatars/${parseInt(user.discriminator) % 5}.png`;
-      document.getElementById('discord-avatar').src = avatarUrl;
-
-      // Update username and discriminator
-      document.getElementById('discord-username').textContent = user.username;
-      document.getElementById('discord-discriminator').textContent = `#${user.discriminator}`;
-
-      // Update status
-      const statusIndicator = document.getElementById('status-indicator');
-      const statusText = document.getElementById('status-text');
-      
-      // Reset all status classes
-      statusIndicator.className = 'status-indicator';
-      
-      // Add the appropriate status class
-      if (status === 'online') {
-        statusIndicator.classList.add('status-online');
-        statusText.textContent = 'Online';
-      } else if (status === 'idle') {
-        statusIndicator.classList.add('status-idle');
-        statusText.textContent = 'Idle';
-      } else if (status === 'dnd') {
-        statusIndicator.classList.add('status-dnd');
-        statusText.textContent = 'Do Not Disturb';
-      } else {
-        statusIndicator.classList.add('status-offline');
-        statusText.textContent = 'Offline';
-      }
-
-      // Update activity
-      const activityContainer = document.getElementById('discord-activity');
-      const activityName = document.getElementById('activity-name');
-      const activityDetails = document.getElementById('activity-details');
-
-      if (activities && activities.length > 0) {
-        const activity = activities[0];
-        activityName.textContent = activity.name || 'Playing a game';
-        activityDetails.textContent = activity.details || '';
-        activityContainer.style.display = 'block';
-      } else {
-        activityContainer.style.display = 'none';
-      }
-    }
-
-    function fetchDiscordData() {
-      fetch("https://api.lanyard.rest/v1/users/1127640909643780146")
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
-        })
-        .then(data => {
-          if (data.success) {
-            updateDiscordWidget(data);
-          } else {
-            console.error("API returned unsuccessful response");
-          }
-        })
-        .catch(error => {
-          console.error("Error fetching Discord data:", error);
-        });
-      
-      // Refresh every 30 seconds
-      setInterval(() => {
-        fetch("https://api.lanyard.rest/v1/users/1127640909643780146")
-          .then(response => response.json())
-          .then(data => updateDiscordWidget(data));
-      }, 30000);
-    }
-
-    window.onload = function () {
+    window.onload = () => {
       createRain();
-      typeWriter();
-      createParticles();
       loadGallery();
-      fetchDiscordData();
-
-      // Ensure video plays
-      const video = document.getElementById('video-background');
-      video.play().catch(e => {
-        console.log("Video autoplay prevented, trying with user interaction");
-        document.body.addEventListener('click', function() {
-          video.play();
-        }, { once: true });
-      });
-
-      document.getElementById('entry-screen').addEventListener('click', function () {
-        this.style.opacity = '0';
+      document.getElementById('entry-screen').addEventListener('click', () => {
+        document.getElementById('entry-screen').style.opacity = '0';
         setTimeout(() => {
-          this.style.display = 'none';
+          document.getElementById('entry-screen').style.display = 'none';
           document.getElementById('main-content').style.display = 'block';
         }, 500);
       });
